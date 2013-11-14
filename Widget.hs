@@ -9,6 +9,9 @@ module Widget
        , searchW
        , releaseListW
        , searchPage
+
+       , userProfilePage
+       , userEditPage
        ) where
 
 import Prelude
@@ -33,7 +36,7 @@ import Yesod
 import Foundation
 import Model
 import Model.Entities
-import Settings as Settings
+import Settings
 
 import Data.Torrent
 import Data.Torrent.Layout
@@ -44,7 +47,17 @@ import Data.Torrent.Piece
 import Handler.User.Permissions
 
 
-type BlankForm = (Widget, Enctype)
+tinyUserpic :: GravatarOptions
+tinyUserpic = def
+  { gDefault = Just Identicon
+  , gSize    = Just (Size 25)
+  }
+
+largeUserpic :: GravatarOptions
+largeUserpic = def
+  { gDefault = Just Identicon
+  , gSize    = Just (Size 150)
+  }
 
 showSize :: Integral a => a -> TL.Text
 showSize = toLazyText . truncate
@@ -59,6 +72,7 @@ showSize = toLazyText . truncate
 
     (gib, mib, kib) = (1024 ^ 3, 1024 ^ 2, 1024 ^ 1)
 
+type BlankForm = (Widget, Enctype)
 type CommentView = (Entity Comment, Entity User)
 
 descriptionW :: BlankForm -> InfoHash -> Widget
@@ -95,3 +109,22 @@ searchPage msearchString releases = do
   searchW msearchString
   when (isJust msearchString) $ do
     releaseListW releases
+
+{-----------------------------------------------------------------------
+--  User views
+-----------------------------------------------------------------------}
+
+userProfilePage :: User -> Widget
+userProfilePage User {..} = do
+  setTitle (toHtml userScreenName)
+  $(widgetFile "user/profile")
+
+userEditPage :: BlankForm -> User -> Widget
+userEditPage (formWidget, formEnctype) User {..} = do
+  setTitle (toHtml userScreenName)
+  $(widgetFile "user/edit")
+
+userMissingPage :: T.Text -> Widget
+userMissingPage userName = do
+  setTitle "Unknown User"
+  $(widgetFile "user/missing")

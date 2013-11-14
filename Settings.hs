@@ -8,11 +8,10 @@ import Yesod.Default.Config
 import Yesod.Default.Util
 import Data.Text (Text)
 import Data.Yaml
+import Data.Default
 import Control.Applicative
 import Settings.Development
 import Text.Hamlet
-import Network.Gravatar
-
 
 type PersistConf = SqliteConf
 
@@ -69,19 +68,6 @@ parseExtra :: DefaultEnv -> Object -> Parser Extra
 parseExtra _ o = Extra
     <$> o .:  "copyright"
     <*> o .:? "analytics"
-
--- TODO to Widget module
-tinyUserpic :: GravatarOptions
-tinyUserpic = def
-  { gDefault = Just Identicon
-  , gSize    = Just (Size 25)
-  }
-
-largeUserpic :: GravatarOptions
-largeUserpic = def
-  { gDefault = Just Identicon
-  , gSize    = Just (Size 150)
-  }
 
 -- | /search?$(queryParamName)=search-query
 searchQueryParamName :: Text

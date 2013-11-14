@@ -23,7 +23,7 @@ $with commentCount <- L.length comments
           <a href=@{UserProfileR name} .span2>
             <img .img-polaroid .userpic .thumbnail .pull-left
                  alt=userpic
-                 src=#{gravatar Settings.tinyUserpic name} />
+                 src=#{gravatar tinyUserpic name} />
           <div .comment-message>
             #{markdown def $ TL.fromStrict msg}
 

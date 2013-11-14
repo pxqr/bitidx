@@ -6,5 +6,5 @@
     <div .form-inputs>
       ^{widget}
     <div .form-actions>
-      <a     .btn href=@{ReleaseR ih}      title=_{MsgBackTitle}> _{MsgBackBtn}
-      <input .btn .btn-primary type=submit title=_{MsgSaveTitle} value=_{MsgSaveBtn}>
+      <a     .btn href=@{ReleaseR ih}      title=_{MsgBackBtnTitle}> _{MsgBackBtnCaption}
+      <input .btn .btn-primary type=submit title=_{MsgSaveBtnTitle} value=_{MsgSaveBtnCaption}>

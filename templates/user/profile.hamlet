@@ -3,7 +3,9 @@
       <a href="http://gravatar.com/emails/" target=_blank>
         <img src=#{gravatar largeUserpic userScreenName} alt=avatar />
       <p> #{userScreenName} —
-        <a href=@{UserEditR userScreenName}> Edit profile
+        <a .btn .btn-link href=@{UserEditR userScreenName}
+                          title=_{MsgEditProfileBtnTitle}>
+                          _{MsgEditProfileBtnCaption}
     <div .detailed>
       $maybe about <- userAbout
         <div .about> #{markdown def $ TL.fromStrict about}

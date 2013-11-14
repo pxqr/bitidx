@@ -1,8 +1,10 @@
 # form buttons
-BackBtn:   Назад
-BackTitle: Все изменения будут потеряны
-SaveBtn:   Сохранить
-SaveTitle: Сохранить текущую версию
+BackBtnCaption:   Назад
+BackBtnTitle:     Все изменения будут потеряны
+CancelBtnCaption: Отменить
+CancelBtnTitle:   Отменить существующие изменения
+SaveBtnCaption:   Сохранить
+SaveBtnTitle:     Сохранить текущую версию
 
 # default layout
 
@@ -17,6 +19,14 @@ FooterHomeBtn:   Домой
 FooterHelpBtn:   Справка
 FooterSourceBtn: Исходники
 FooterIssuesBtn: Неполадки
+
+# user
+## user profile
+EditProfileBtnCaption: Редактировать профиль
+EditProfileBtnTitle:   TODO
+## user edit profile
+BackToProfileBtnCaption: Вернуться к профилю
+EditUserLegend:  Изменить профиль...
 
 # the release page
 DescriptionTab: Oписание

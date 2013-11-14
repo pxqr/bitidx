@@ -1,10 +1,12 @@
 AppName: Bitidx
 
-# Form buttons
-BackBtn:   Back
-BackTitle: All changes will be lost
-SaveBtn:   Save
-SaveTitle: Save current changes
+# general form buttons
+BackBtnCaption:   Back
+BackBtnTitle:     All changes will be lost
+CancelBtnCaption: Cancel
+CancelBtnTitle:   Cancel current changes
+SaveBtnCaption:   Save
+SaveBtnTitle:     Save current changes
 
 # default layout
 
@@ -19,6 +21,14 @@ FooterHomeBtn:   Home
 FooterHelpBtn:   Help
 FooterSourceBtn: Source
 FooterIssuesBtn: Issues
+
+# user
+## user profile
+EditProfileBtnCaption: Редактировать профиль
+EditProfileBtnTitle:   TODO
+## user edit profile
+BackToProfileBtnCaption: Back to profile
+EditUserLegend:  Edit user info...
 
 # the release page
 DescriptionTab:    Description

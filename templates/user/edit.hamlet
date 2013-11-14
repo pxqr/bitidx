@@ -1,6 +1,11 @@
 <form .edit method=post action=@{UserEditR userScreenName} enctype=#{formEnctype}>
+  <legend>
+    <span>
+      _{MsgEditUserLegend}
   ^{formWidget}
   <div .form-actions>
-    <a .btn href=@{UserProfileR userScreenName}> TODO Back to profile
-    <a .btn href=@{UserEditR    userScreenName}> TODO Cancel
-    <input type=submit value=Apply   .btn .btn-primary>
+    <a .btn .btn-small href=@{UserProfileR userScreenName} title=_{MsgBackBtnTitle}>
+      _{MsgBackToProfileBtnCaption}
+    <a .btn .btn-small href=@{UserEditR    userScreenName} title=_{MsgCancelBtnTitle}>
+      _{MsgCancelBtnCaption}
+    <input .btn .btn-primary type=submit value=_{MsgSaveBtnCaption} title=_{MsgSaveBtnTitle}>

@@ -1,0 +1,29 @@
+form.add-comment textarea {
+    width:  65%;
+    height: 8em;
+    margin: 0 auto;
+}
+
+article.comment:target {
+//    border: 1px solid #7CC7EF;
+}
+
+.comment-body {
+    padding: 1em 0;
+}
+
+.comment-body img.userpic {
+    height: 50px;
+    width:  50px;
+    box-shadow: 1px 1px 2px #ccc;
+}
+
+
+.comment-message code:before {
+    content: "> ";
+
+}
+
+.comment-message code {
+    color: green;
+}

@@ -1,0 +1,30 @@
+Release
+    torrentId      InfoHash
+    name           Text
+    author         UserId
+    file           Torrent
+    description    Text Maybe
+    uploaded       UTCTime
+    UniqueRelease  torrentId
+Related
+    revision       ReleaseId
+    relatedTo      ReleaseId
+User
+    screenName     Text
+    about          Text Maybe
+    UniqueUser     screenName
+    deriving Typeable
+Comment
+    torrentId      InfoHash
+    added          UTCTime
+    author         UserId
+    body           Text
+    UniqueComment  torrentId added
+Follower
+    follower    UserId
+    following   UserId
+Email
+    email Text
+    user UserId Maybe
+    verkey Text Maybe
+    UniqueEmail email

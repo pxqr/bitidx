@@ -1,0 +1,5 @@
+<p .error> No such user.
+<p .warning>
+  Probably
+  <a href=@{UserProfileR uid}> #{show uid}
+  has been deleted his account.

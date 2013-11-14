@@ -1,0 +1,23 @@
+$if L.null releases
+  <p> No results
+$else
+  <table .torrent-list>
+    <thead>
+      <tr>
+        <th #hash   .hidden-phone>    _{MsgListHashCol}
+        <th #name>                    _{MsgListNameCol}
+        <th #size>                    _{MsgListSizeCol}
+        <th #author .visible-desktop> _{MsgListAuthorCol}
+    <tbody>
+      $forall x <- releases
+        <tr>
+          $with Release rid name author (Torrent _ _ _ _ _ _ (InfoDict ih li _ _) _ _ _) desc uploaded <- x
+            <td .hidden-phone>
+              <p title=#{longHex ih}>
+                #{shortHex ih}
+            <td>
+              <a href=@{ReleaseR ih}>
+                #{name}
+            $with totalSize <- contentLength li
+              <td title=#{show totalSize <> " Bytes"}>
+                #{showSize totalSize}

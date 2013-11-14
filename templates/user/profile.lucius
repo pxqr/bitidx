@@ -1,0 +1,8 @@
+#profile {
+    padding: 1em;
+}
+
+.brief img {
+    display: block;
+    float: left;
+}

@@ -1,0 +1,76 @@
+$with torrent @ (Torrent {..}) <- releaseFile
+  <ul class=breadcrumb>
+    <li>
+      <a href="#"> Category
+      <span .divider>/
+    <li>
+      <a href="#"> ReleaseName
+      <span .divider>/
+    <li .active> Specialization
+
+  <div .social>
+    <h4> #{longHex releaseTorrentId}
+    <a .btn .btn-mini>
+      <i .icon-star>
+      Star
+
+    <a .btn .btn-mini href=@{ReleaseR releaseTorrentId}>
+      <img src="http://poptech.org/system/web_images/884/original/rss_icon.png?1297099441">
+      Feed
+
+  <h2> #{releaseName}
+  <hr>
+
+  <div .tabbable>
+    <ul #tabs .nav .nav-tabs data-tabs=tabs>
+      <li .active>
+        <a href=#description data-toggle=tab>
+          _{MsgDescriptionTab}
+      <li>
+        <a href=#metadata    data-toggle=tab>
+          _{MsgMetadataTab}
+
+      $if canEdit
+       <li .dropdown>
+        <a .dropdown-toggle data-toggle=dropdown href="#">
+          Edit
+          <b .caret>
+        <ul .dropdown-menu>
+          <li>
+            <a title=_{MsgEditDescBtnTitle} href=@{DescriptionR releaseTorrentId}>
+              _{MsgEditDescBtnCaption}
+          <li>
+            <a title=_{MsgEditMetaBtnTitle} href=@{MetadataR releaseTorrentId}>
+              _{MsgEditMetaBtnCaption}
+          <li>
+            <form method=post action=@{ReleaseR releaseTorrentId}>
+              <input type=submit title=_{MsgDeleteBtnTitle}
+                                 value=_{MsgDeleteBtnCaption}>
+          <li>
+
+            <a title=_{MsgDeleteBtnTitle} onclick="deleteRelease()">
+               _{MsgDeleteBtnCaption}
+
+    <div .tab-content>
+      <div #description .tab-pane .active>
+        $maybe description <- releaseDescription
+          <p> #{markdown def $ TL.fromStrict description}
+        $nothing
+          <div .alert .alert-block>
+            _{MsgNoDescriptionLbl}
+      <div #metadata .tab-pane>
+        ^{metadataW torrent}
+
+  <div #download .form-actions>
+    <span>
+      _{MsgDownloadBarText}
+    <div .pull-right>
+      <a .btn title=_{MsgTorrentBtnTitle} href=@{TorrentFileR releaseTorrentId}>
+        <i .icon-file>
+        _{MsgTorrentBtnCaption}
+      <a .btn .btn-primary title=_{MsgMagnetBtnTitle}
+                           href=#{show $ simpleMagnet torrent}>
+        <i .icon-magnet>
+        _{MsgMagnetBtnCaption}
+  <div #releaser .well>
+    <p> #{show releaseUploaded}

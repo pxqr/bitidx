@@ -1,0 +1,35 @@
+$with commentCount <- L.length comments
+  <h3>
+    <i .icon-comment>
+    $if not (L.null comments)
+      _{MsgHdrComments} (#{show commentCount}) ...
+    $else
+      _{MsgHdrNoComments}
+
+<div .comments .span8>
+  $forall (Entity commentId (Comment _ added _ msg), Entity _ (User name _)) <- comments
+    $with anchor <- persistId commentId
+      <article .comment .well ##{anchor}>
+        <header>
+          <a .author href=@{UserProfileR name}>
+            #{name}
+          on
+          <time .added datetime=#{formatDatetime added} pubdate>
+            #{formatEventTime added}
+          <a .permalink .pull-right href=#{"#" <> anchor}>
+            permalink
+
+        <div .comment-body>
+          <a href=@{UserProfileR name} .span2>
+            <img .img-polaroid .userpic .thumbnail .pull-left
+                 alt=userpic
+                 src=#{gravatar Settings.tinyUserpic name} />
+          <div .comment-message>
+            #{markdown def $ TL.fromStrict msg}
+
+$if canComment
+  <form .add-comment
+        method=post action=@{DiscussionR releaseTorrentId} enctype=#{formEnctype}>
+    ^{formWidget}
+    <div .form-actions>
+      <input .btn .btn-primary type=submit value=_{MsgAddCommentBtn}>

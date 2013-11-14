@@ -1,0 +1,6 @@
+<form .edit method=post action=@{UserEditR uid} enctype=#{formEnctype}>
+  ^{formWidget}
+  <div .form-actions>
+    <a .btn href=@{UserProfileR uid}> Back to profile
+    <a .btn href=@{UserEditR uid}>    Cancel
+    <input type=submit value=Apply   .btn .btn-primary>

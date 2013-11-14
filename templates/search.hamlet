@@ -1,0 +1,9 @@
+<div .offset2 .span8>
+  <form .form-search role=search method=get>
+    <div .input-append>
+      <input .search-query autofocus required
+             type=search
+             name=#{Settings.searchQueryParamName}
+             placeholder="Search by name and description..."
+             value=#{fromMaybe "" msearchString}>
+      <input .btn          type=submit value=Search>

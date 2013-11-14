@@ -1,0 +1,8 @@
+<div #upload  .offset3 .span6>
+  <div .muted role=note>
+    <b>Tip:
+    You can edit description or metadata later.
+
+  <form .form method=post action=@{AddR} enctype=#{formEnctype}>
+    ^{formWidget}
+    <input .btn type=submit value=Add>

@@ -1,0 +1,10 @@
+<div #profile>
+  $with User name about <- user
+    <div .brief>
+      <a href="http://gravatar.com/emails/" target=_blank>
+        <img src=#{gravatar largeUserpic name} alt=avatar />
+      <p> #{name} —
+        <a href=@{UserEditR name}> Edit profile
+    <div .detailed>
+      $maybe aboutInfo <- about
+        <div .about> #{markdown def $ TL.fromStrict aboutInfo}

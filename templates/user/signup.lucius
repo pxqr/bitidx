@@ -1,0 +1,16 @@
+form#signup {
+
+}
+
+form#signup div {
+
+}
+
+form#signup div label {
+    float: left;
+    width: 10em;
+}
+
+form#signup div#required input {
+
+}

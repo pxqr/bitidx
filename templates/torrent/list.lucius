@@ -1,0 +1,29 @@
+.torrent-list {
+
+}
+
+.torrent-list a[href]:visited {
+    text-decoration: underline;
+    color:           #AB6954
+}
+
+.torrent-list tbody tr {
+    width: 100%;
+    margin: 1em;
+}
+
+.torrent-list tbody tr:hover {
+    background-color: #eee;
+}
+
+.torrent-list #hash  {
+    width: 100px;
+}
+
+.torrent-list td {
+    padding: 1em;
+}
+
+.torrent-list #hash {
+    width: 20%
+}

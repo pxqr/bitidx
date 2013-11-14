@@ -1,0 +1,49 @@
+<div .container>
+  <div .wrap>
+$#    <header .header>
+      <div .row>
+        <nav .span12 role=navigation>
+          <div .navbar>
+            <div .navbar-inner>
+              <ul .nav>
+                <a .brand href=@{HomeR}> _{MsgAppName}
+                <li>
+                  <a href=@{SearchR}> _{MsgNavSearchBtn}
+                <li>
+                  <a href=@{AddR}>    _{MsgNavAddBtn}
+                <li .divider-vertical>
+                $maybe Entity userId (User name _) <- mAuth
+                  <li .pull-right>
+$#              <img src=#{gravatar Settings.tinyUserpic name}
+$#                   alt=userpic />
+                    <a href=@{UserProfileR name}> #{name}
+                  <li>
+                    <a href=@{AuthR LogoutR}> _{MsgNavSignoutBtn}
+                $nothing
+                  <li .pull-rigth>
+                    <a href=@{AuthR LoginR}>  _{MsgNavSigninBtn}
+
+    $maybe msg <- mmsg
+      <div #message .alert-info>
+        <a .close href="#" data-dismiss=alert>&times;
+        #{msg}
+
+    <div .main .row-fluid role=main>
+      ^{widget}
+
+    <div .push>
+
+  <footer .footer>
+    <div .row-fluid>
+      <a .span3 href=@{HomeR}> _{MsgFooterHomeBtn}
+      <a .span3 href=@{HelpR}> _{MsgFooterHelpBtn}
+      <a .span3 href="https://www.github.com/cobit/bitidx">
+        _{MsgFooterSourceBtn}
+      <a .span3 href="https://www.github.com/cobit/bitidx/issues">
+        _{MsgFooterIssuesBtn}
+
+    <div .row>
+      <p .span12 .muted>
+         $with copyright <- extraCopyright $ appExtra $ settings master
+           <p> #{copyright}
+         <p> Produced by _{MsgAppName} version #{showVersion version}

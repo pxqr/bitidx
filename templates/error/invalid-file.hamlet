@@ -1,0 +1,5 @@
+<h1> Invalid torrent file.
+<p>  Possible reasons are:
+<ul>
+  <li> This is not a torrent file.
+  <li> This is a broken torrent file.

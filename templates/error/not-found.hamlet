@@ -1,0 +1,13 @@
+<div #not-found>
+  <div>
+    <h1>Sorry... Not found...
+    <div #smile>
+      X_X
+    <div #helper>
+      <p> The page you requested may have been <b>moved</b>, <b>deleted</b> or <b>never exist</b>.
+      <p> Let's try to get you back on track:
+      <ul #choice>
+        <li>Go to the
+          <a href=@{HomeR}> homepage
+        <li>Get
+          <a href=@{HelpR}> help

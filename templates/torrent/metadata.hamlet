@@ -1,0 +1,164 @@
+$with Torrent {..} <- torrent
+  <table .metadata>
+    <tbody>
+      <tr>
+        <th>
+          <abbr title="tracker URL">
+             announce
+        <td> #{show tAnnounce}
+
+      $maybe annList <- tAnnounceList
+        <tr>
+          <th>
+            <abbr title="TODO">
+              announce list
+          <td>
+            <table .table>
+              <tbody>
+                $forall (tier, n) <- L.zip annList $ enumFrom 1
+                  <tr>
+                    <th> tier #{show n}
+                    <td>
+                      <ul>
+                        $forall ann <- tier
+                          <li> #{show ann}
+
+      $maybe comments <- tComment
+        <tr>
+          <th>
+            <abbr title="author comment">
+              comment
+          <td> #{comments}
+
+      $maybe createdBy <- tCreatedBy
+        <tr>
+          <th>
+            <abbr title="client used to create this torrent file">
+              created by
+          <td> #{createdBy}
+
+      $maybe creationDate <- tCreationDate
+        <tr>
+          <th>
+            <abbr title="time when torrent file have been created">
+              creation date
+          <td> #{show $ posixSecondsToUTCTime creationDate}
+
+      $maybe encoding <- tEncoding
+        <tr>
+          <th>
+            <abbr title="encoding used for file names">
+              encoding
+          <td> #{encoding}
+
+      $with layout <- idLayoutInfo tInfoDict
+        <tr .info-dict>
+          <th>
+            <abbr title="pernament part of torrent file">
+              info dictionary
+          <td>
+            <table>
+              <tbody>
+                <tr>
+$#                  <th> files
+                  <td>
+                    $case layout
+                      $of SingleFile fi
+                        <table>
+                          <tbody>
+                            $with FileInfo len mmd5 name <- fi
+                              <tr>
+                                <th>file length
+                                <td title=#{show len}>
+                                  #{showSize len}
+                                $maybe md5 <- mmd5
+                                  <tr>
+                                    <th>
+                                      <abbr title="TODO">
+                                        MD5 sum
+                                    <td> #{show md5}
+                                <tr>
+                                  <th>file name
+                                  <td>
+                                    $with filePath <- T.decodeUtf8 name
+                                      $if T.isSuffixOf ".mkv" filePath
+                                        <i .icon-film>
+                                      $else
+                                        <i .icon-file>
+                                      #{filePath}
+
+                      $of MultiFile fis dir
+                        <table .table>
+                          <thead>
+                            <th>path
+                            <th>size
+                            $if L.any isJust $ fmap fiMD5Sum fis
+                              <th>
+                                <abbr title="TODO">
+                                  MD5 sum
+                          <tbody>
+                            $forall FileInfo len mmd5 path <- fis
+                              <tr>
+                                <td>
+                                  $with filePath <- T.intercalate "/" $ fmap T.decodeUtf8 $ path
+                                    $if T.isSuffixOf ".mkv" filePath
+                                      <i .icon-film>
+                                    $else
+                                      <i .icon-file>
+                                    #{filePath}
+                                <td title=#{show len}>
+                                  #{showSize len}
+                                $maybe md5 <- mmd5
+                                  <td> #{show md5}
+                          <tfoot>
+                            <tr>
+                              <td> Total
+                              $with totalLen <- contentLength layout
+                                <td title=#{show totalLen}>
+                                  #{showSize totalLen}
+                <tr>
+                  <th>
+                    <abbr title="TODO">
+                      piece size
+                  <td>
+                    $with len <- piPieceLength $ idPieceInfo tInfoDict
+                      <td title=#{show len}>
+                        #{showSize len}
+
+                <tr>
+                  <th>
+                    <abbr title="TODO">
+                      domain
+                  <td>
+                    $if idPrivate tInfoDict
+                      <abbr title="TODO">
+                        private
+                    $else
+                      <abbr title="TODO">
+                        public
+
+      $maybe publisher <- tPublisher
+        <tr>
+          <th>
+            <abbr title="TODO">
+              publisher
+          <td>
+            <a href=#{show publisher}>
+              #{show publisher}
+
+      $maybe publisherURL <- tPublisherURL
+        <tr>
+          <th>
+            <abbr title="TODO">
+              publisher URL
+          <td .label-success>
+            $with uriString <- show publisherURL
+              <a href=#{uriString}>
+                #{uriString}
+
+      $maybe signature <- tSignature
+        <tr>
+          <th>
+            <abbr title="TODO">
+              signature
+          <td> #{show signature}

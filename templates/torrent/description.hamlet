@@ -1,0 +1,10 @@
+<form .form .form-horizontal
+      method=post action=@{DescriptionR ih} enctype=#{enctype}>
+  <fieldset>
+    <legend>
+      <span> _{MsgEditDescriptionLegend}
+    <div .form-inputs>
+      ^{widget}
+    <div .form-actions>
+      <a     .btn href=@{ReleaseR ih}      title=_{MsgBackTitle}> _{MsgBackBtn}
+      <input .btn .btn-primary type=submit title=_{MsgSaveTitle} value=_{MsgSaveBtn}>

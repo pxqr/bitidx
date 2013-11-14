@@ -1,0 +1,27 @@
+#not-found {
+    width:   65%;
+    margin:  5em auto;
+    padding: 0.5em;
+
+    background-color: #C24029;
+    border-radius:    1em;
+    box-shadow:       2px 3px 2px #bbb;
+}
+
+#not-found div {
+    padding:          2em;
+    background-color: #dfdfda;
+    border-radius:    0.6em;
+}
+
+#not-found #smile {
+    float:     left;
+    font-size: 50pt;
+    padding:   1em;
+    margin:    0 auto;
+    height:    100%;
+}
+
+#helper ul {
+    list-style-type: none;
+}

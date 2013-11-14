@@ -1,0 +1,73 @@
+/***********************************************************************
+** footer always at bottom
+***********************************************************************/
+
+html, body, div.container {
+    height: 100%;
+}
+
+.wrap {
+    min-height: 100%;
+}
+
+/*
+.main {
+    overflow:   auto;
+    padding-bottom: 150px;
+}
+*/
+
+.push {
+    height:      120px;
+}
+
+.footer {
+    position: relative;
+    margin-top: -120px;
+    height:      120px;
+}
+
+/***********************************************************************
+**  global layout
+***********************************************************************/
+
+body {
+//    background-color: #eee;
+}
+
+.main, .footer, .header {
+    background-color: white;
+    box-shadow:       1px 1px 3px #ccc;
+    border: 1px solid #ccc;
+}
+
+.header {
+
+}
+
+.main {
+    border-radius: 5px;
+    margin-top:    3em;
+    margin-bottom: 3em;
+    padding-top:   1em;
+}
+
+.footer {
+    border-top: 1px solid #ddd;
+    padding-top: 1em;
+    text-align: center;
+}
+
+.footer p {
+    margin-top: 1em;
+}
+
+
+/***********************************************************************
+**  global styles
+***********************************************************************/
+
+a[href] {
+    color:       #000;
+    text-weight: bold;
+}

@@ -1,0 +1,22 @@
+/static StaticR Static getStatic
+/auth   AuthR   Auth   getAuth
+
+/favicon.ico FaviconR GET
+/robots.txt RobotsR GET
+
+/                     HomeR               GET
+/help                 HelpR               GET
+
+/search                        SearchR      GET
+/torrent                       AddR         GET POST
+/torrent/#InfoHash             ReleaseR     GET POST DELETE
+/torrent/#InfoHash/description DescriptionR GET POST
+/torrent/#InfoHash/discussion  DiscussionR  GET POST
+/torrent/#InfoHash/metadata    MetadataR    GET POST
+/torrent/#InfoHash/torrent     TorrentFileR GET
+
+/error/invalid-file            InvalidTorrentFileR GET
+/error/already-exist/#InfoHash AlreadyExistR       GET
+
+/user/#Text/profile   UserProfileR        GET
+/user/#Text/edit      UserEditR           GET POST

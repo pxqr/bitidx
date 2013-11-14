@@ -1,0 +1,7 @@
+#upload {
+//    border-bottom: 3px solid #aaa;
+}
+
+.required {
+    display: inline;
+}

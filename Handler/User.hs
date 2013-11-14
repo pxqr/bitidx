@@ -34,7 +34,7 @@ userUpdates UserEdit {..}
   = maybe [] (\ (Textarea a) -> [UserAbout =. Just a]) editAbout
 
 userEditForm :: User -> Form UserEdit
-userEditForm (User uid about) = renderDivs $ do
+userEditForm (User uid about) = renderBootstrap $ do
   UserEdit <$> aopt textareaField "about" (Just (Textarea <$> about))
 
 getUserEditR :: T.Text -> Handler Html

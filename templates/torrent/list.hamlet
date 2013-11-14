@@ -1,5 +1,5 @@
 $if L.null releases
-  <p> No results
+  <p> _{MsgNoResults}
 $else
   <table .torrent-list>
     <thead>
@@ -9,15 +9,15 @@ $else
         <th #size>                    _{MsgListSizeCol}
         <th #author .visible-desktop> _{MsgListAuthorCol}
     <tbody>
-      $forall x <- releases
+      $forall Release {..} <- releases
         <tr>
-          $with Release rid name author (Torrent _ _ _ _ _ _ (InfoDict ih li _ _) _ _ _) desc uploaded <- x
+          $with Torrent {..} <- releaseFile
             <td .hidden-phone>
-              <p title=#{longHex ih}>
-                #{shortHex ih}
+              <p title=#{longHex releaseTorrentId}>
+                #{shortHex releaseTorrentId}
             <td>
-              <a href=@{ReleaseR ih}>
-                #{name}
-            $with totalSize <- contentLength li
+              <a href=@{ReleaseR releaseTorrentId}>
+                #{releaseName}
+            $with totalSize <- contentLength $ idLayoutInfo tInfoDict
               <td title=#{show totalSize <> " Bytes"}>
                 #{showSize totalSize}

@@ -4,6 +4,6 @@
       <input .search-query autofocus required
              type=search
              name=#{Settings.searchQueryParamName}
-             placeholder="Search by name and description..."
+             placeholder=_{MsgNavSearchPlaceholder}
              value=#{fromMaybe "" msearchString}>
       <input .btn          type=submit value=Search>

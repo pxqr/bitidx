@@ -45,6 +45,10 @@ body {
 
 }
 
+.navbar .search-query {
+    width: 150px;
+}
+
 .main {
     border-radius: 5px;
     margin-top:    3em;

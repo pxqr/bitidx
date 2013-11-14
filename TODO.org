@@ -1,3 +1,4 @@
+* DONE move search to homepage (header navbar)
 * TODO parent torrent and(or?) breadcrumbs (for rips)
 * TODO recently viewed
 * TODO make about, contact, home, api pages static
@@ -15,4 +16,3 @@ api
 need to modify Read InfoHash and FromChunk InfoHash instances
 * TODO shorten release route to /#InfoHash ?
 * TODO all torrents by the user
-* TODO move search to homepage

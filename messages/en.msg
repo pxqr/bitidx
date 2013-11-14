@@ -11,6 +11,7 @@ SaveBtnTitle:     Save current changes
 # default layout
 
 ## header
+NavSearchPlaceholder: Search by name and description...
 NavSearchBtn:  Search
 NavAddBtn:     Add
 NavSigninBtn:  Sign in
@@ -30,6 +31,9 @@ EditProfileBtnTitle:   TODO
 BackToProfileBtnCaption: Back to profile
 EditUserLegend:  Edit user info...
 
+# search
+NoResults: No results
+
 # the release page
 DescriptionTab:    Description
 NoDescriptionLbl:  Author probably do not added any descriptions yet...
@@ -38,7 +42,6 @@ EditDescBtnCaption: Description
 EditDescBtnTitle:   Change release name or description
 EditMetaBtnCaption: Metadata
 EditMetaBtnTitle:   Change torrent file fields
-
 
 ## the release page - maintainer tab
 DeleteBtnCaption:  Delete

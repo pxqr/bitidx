@@ -9,6 +9,7 @@ SaveBtnTitle:     Сохранить текущую версию
 # default layout
 
 ## header
+NavSearchPlaceholder: Искать по имени и описанию...
 NavSearchBtn:  Поиск
 NavAddBtn:     Добавить
 NavSigninBtn:  Войти
@@ -27,6 +28,9 @@ EditProfileBtnTitle:   TODO
 ## user edit profile
 BackToProfileBtnCaption: Вернуться к профилю
 EditUserLegend:  Изменить профиль...
+
+# search
+NoResults: Нет результатов
 
 # the release page
 DescriptionTab: Oписание

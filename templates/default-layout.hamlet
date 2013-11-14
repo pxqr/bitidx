@@ -7,8 +7,11 @@ $#    <header .header>
             <div .navbar-inner>
               <ul .nav>
                 <a .brand href=@{HomeR}> _{MsgAppName}
-                <li>
-                  <a href=@{SearchR}> _{MsgNavSearchBtn}
+                <form .navbar-search method=get action=@{SearchR} role=search>
+                  <input .search-query type=search name=q
+                         placeholder=_{MsgNavSearchPlaceholder}>
+$#                <li>
+$#                  <a href=@{SearchR}> _{MsgNavSearchBtn}
                 <li>
                   <a href=@{AddR}>    _{MsgNavAddBtn}
                 <li .divider-vertical>

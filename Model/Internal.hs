@@ -30,5 +30,5 @@ instance PersistFieldSql Torrent where
   sqlType _ = SqlBlob
 
 instance PathPiece InfoHash where
-  fromPathPiece = readMaybe . T.unpack
-  toPathPiece   = T.pack . show
+  fromPathPiece = textToInfoHash
+  toPathPiece   = longHex

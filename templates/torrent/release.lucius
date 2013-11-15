@@ -2,6 +2,10 @@ li {
     display: block;
 }
 
+.release-name {
+    padding: 0 1em;
+}
+
 .tab-content {
     padding: 0 2em;
 }
@@ -15,6 +19,18 @@ li {
 
 #description img[alt=inline] {
     float: none;
+}
+
+#social {
+    margin: 0 1em;
+}
+
+#releaser {
+    margin: 0 1em;
+}
+
+.comments {
+    padding: 0 1em;
 }
 
 @media (min-width: 1200px) {

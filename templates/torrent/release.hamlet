@@ -1,23 +1,16 @@
 $with torrent @ (Torrent {..}) <- releaseFile
-  <ul class=breadcrumb>
-    <li>
-      <a href="#"> Category
-      <span .divider>/
-    <li>
-      <a href="#"> ReleaseName
-      <span .divider>/
-    <li .active> Specialization
+  <h2 .release-name> #{releaseName}
+  <hr>
 
-  <div .social>
+  <div .social .pull-right>
     <a .btn .btn-mini>
       <i .icon-star>
       Star
-    <a .btn .btn-mini href=@{ReleaseR releaseTorrentId}>
+    <a .btn .btn-mini
+       href=@{ReleaseR releaseTorrentId}
+       title=_{MsgReleaseFeedBtnTitle}>
       <img src="http://poptech.org/system/web_images/884/original/rss_icon.png?1297099441">
-      Feed
-
-  <h2> #{releaseName}
-  <hr>
+      _{MsgReleaseFeedBtnCaption}
 
   <div .tabbable>
     <ul #tabs .nav .nav-tabs data-tabs=tabs>

@@ -158,7 +158,7 @@ instance YesodAuth App where
 {-----------------------------------------------------------------------
 --  Current route check
 --
---  predicated used to style current active page in navbar
+--  predicates used to style current active page in navbar
 -----------------------------------------------------------------------}
 checkMaybe :: Maybe a -> (a -> Bool) -> Bool
 checkMaybe = flip (maybe False)

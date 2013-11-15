@@ -35,6 +35,8 @@ EditUserLegend:  Edit user info...
 NoResults: No results
 
 # the release page
+ReleaseFeedBtnCaption: Feed
+ReleaseFeedBtnTitle:   Copy this URL to RSS/Atom feed and paste in your feed reader
 DescriptionTab:    Description
 NoDescriptionLbl:  Author probably do not added any descriptions yet...
 MetadataTab:       Metadata

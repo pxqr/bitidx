@@ -17,8 +17,4 @@ getNewTorrents = do
 getHomeR :: Handler Html
 getHomeR = do
   releases <- getNewTorrents
-  defaultLayout $ do
-    aDomId <- newIdent
-    setTitle "BitIdx"
-    $(widgetFile "homepage")
-    releaseListW releases
+  defaultLayout $ homePage releases

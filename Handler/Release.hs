@@ -97,24 +97,10 @@ getAlreadyExistR ih = do
 --  Add new release
 -----------------------------------------------------------------------}
 
-data NewRelease = NewRelease
-  { torrentName :: T.Text
-  , torrentFile :: I.FileInfo
-  }
-
-addForm :: Form NewRelease
-addForm = renderDivs $ do
-  NewRelease
-    <$> areq textField "Name" Nothing
-    <*> fileAFormReq   "Choose a .torrent file"
-
 getAddR :: Handler Html
 getAddR = do
--- TODO  authorId <- requireAuthId
-  (formWidget, formEnctype) <- generateFormPost addForm
-  defaultLayout $ do
-    setTitle "Add torrent to database"
-    $(widgetFile "add/upload")
+  form <- generateFormPost addForm
+  defaultLayout $ addReleasePage form
 
 postAddR :: Handler Html
 postAddR = do
@@ -130,9 +116,7 @@ postAddR = do
         if not (isJust added)
           then redirect (AlreadyExistR ih)
           else do
-               setMessage $ [shamlet|
-                   <div .label-success> Torrent successufully added to database.
-                 |]
+               setMessage addedSuccessfullyMessage
                redirect $ ReleaseR ih
 
 addNewReleaseT :: T.Text -> UserId -> Torrent -> YesodDB App (Maybe (Key Release))
@@ -201,8 +185,7 @@ getReleaseHtml release @ Release {..} comments = do
   form  <- generateFormPost commentForm
   defaultLayout $ do
     feedLink (ReleaseR releaseTorrentId) releaseName
-    releasePage release permissions
-    discussionW form release comments permissions
+    releasePage form release comments permissions
 
 selectComments :: InfoHash -> YesodDB App [CommentView]
 selectComments infohash =
@@ -253,11 +236,6 @@ getTorrentFileR ih = withRelease ih (return . releaseFile . entityVal)
 --  Description Resource
 -----------------------------------------------------------------------}
 
-data Description = Description
-  { name        :: T.Text
-  , description :: Maybe Textarea
-  }
-
 releaseDesc :: Release -> Description
 releaseDesc Release {..}
   = Description releaseName (Textarea <$> releaseDescription)
@@ -268,17 +246,10 @@ updateDescription Description {..}
     , ReleaseDescription =. unTextarea <$> description
     ]
 
-descriptionForm :: Description -> Form Description
-descriptionForm Description {..} = renderBootstrap $ do
-  Description <$> areq textField     "Name"        (Just name)
-              <*> aopt textareaField "Description" (Just description)
-
 getDescriptionHtml :: Release -> Handler Html
-getDescriptionHtml release @ (Release ih _ _ _ _ _) = do
+getDescriptionHtml release @ Release {..} = do
   form <- generateFormPost $ descriptionForm $ releaseDesc release
-  defaultLayout $ do
-    setTitle "Release description"
-    descriptionW form ih
+  defaultLayout $ descriptionPage form releaseTorrentId
 
 getDescriptionR :: InfoHash -> Handler TypedContent
 getDescriptionR ih = do
@@ -297,28 +268,11 @@ postDescriptionR ih = do
 {-----------------------------------------------------------------------
 --  Metadata Resource
 -----------------------------------------------------------------------}
--- TODO more fields
--- TODO detalize fields
-
-metadataForm :: Torrent -> Form Torrent
-metadataForm Torrent {..} = renderBootstrap $ do
-  Torrent <$> pure tAnnounce
-          <*> pure tAnnounceList
-          <*> aopt textField "Comment"     (Just tComment)
-          <*> aopt textField "Created by"  (Just tCreatedBy)
-          <*> pure tCreationDate
-          <*> pure tEncoding
-          <*> pure tInfoDict
-          <*> pure tPublisher
-          <*> pure tPublisherURL
-          <*> pure tSignature
 
 getMetadataHtml :: Torrent -> Handler Html
 getMetadataHtml torrent @ Torrent { tInfoDict = InfoDict { idInfoHash = ih} } = do
   form <- generateFormPost (metadataForm torrent)
-  defaultLayout $ do
-    setTitle "Release metadata"
-    metadataEditorW form ih
+  defaultLayout $ metadataEditorPage form ih
 
 getMetadataR :: InfoHash -> Handler TypedContent
 getMetadataR ih = do
@@ -345,9 +299,7 @@ getDiscussionHtml release @ Release {..} comments = do
   let ih = idInfoHash $ tInfoDict releaseFile
   permissions <- getPermissions releaseAuthor
   form  <- generateFormPost commentForm
-  defaultLayout $ do
-    setTitle (toHtml releaseName)
-    discussionW form release comments permissions
+  defaultLayout $ discussionPage form release comments permissions
 
 getDiscussionJson :: DiscussionPresentation Json
 getDiscussionJson = undefined

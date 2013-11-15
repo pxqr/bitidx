@@ -24,6 +24,7 @@ import Handler.Home
 import Handler.Release
 import Handler.User
 import Handler.Search
+import Handler.Tracker
 
 
 -- This line actually creates our YesodDispatch instance. It is the second half

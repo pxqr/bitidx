@@ -28,6 +28,7 @@ library
                      Handler.User
                      Handler.User.Permissions
                      Handler.Help
+                     Handler.Tracker
                      Paths_bitidx
 
     if flag(dev) || flag(library-only)

@@ -88,13 +88,8 @@ instance Yesod App where
         master <- getYesod
         mmsg <- getMessage
 
-        -- We break up the default layout into two components:
-        -- default-layout is the contents of the body tag, and
-        -- default-layout-wrapper is the entire page. Since the final
-        -- value passed to hamletToRepHtml cannot be a widget, this allows
-        -- you to use normal widget features in default-layout.
-
         (title, parents) <- breadcrumbs
+        mcurrentRoute    <- getCurrentRoute
 
         mAuth <- maybeAuth
         pc <- widgetToPageContent $ do
@@ -159,6 +154,32 @@ instance YesodAuth App where
 
     authPlugins _ = [ authGoogleEmail]
     authHttpManager = httpManager
+
+{-----------------------------------------------------------------------
+--  Current route check
+--
+--  predicated used to style current active page in navbar
+-----------------------------------------------------------------------}
+checkMaybe :: Maybe a -> (a -> Bool) -> Bool
+checkMaybe = flip (maybe False)
+
+isSearchRoute :: Route App -> Bool
+isSearchRoute = (==) SearchR
+
+isAddRoute :: Route App -> Bool
+isAddRoute r = r == AddR
+
+isUserRoute :: Route App -> Bool
+isUserRoute (UserProfileR _) = True
+isUserRoute (UserEditR    _) = True
+isUserRoute  _               = False
+
+isLoginRoute :: Route App -> Bool
+isLoginRoute (AuthR r) = r == LoginR
+isLoginRoute _         = False
+
+isSearchableRoute :: Route App -> Bool
+isSearchableRoute = undefined
 
 instance YesodBreadcrumbs App where
   breadcrumb  HomeR             = return ("Home"       , Nothing)

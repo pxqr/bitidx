@@ -7,23 +7,25 @@ $#    <header .header>
             <div .navbar-inner>
               <ul .nav>
                 <a .brand href=@{HomeR}> _{MsgAppName}
-                <form .navbar-search method=get action=@{SearchR} role=search>
-                  <input .search-query type=search name=q
-                         placeholder=_{MsgNavSearchPlaceholder}>
+                $if not $ checkMaybe mcurrentRoute isSearchRoute
+                  <form .navbar-search method=get action=@{SearchR} role=search>
+                    <input .search-query type=search name=q
+                            placeholder=_{MsgNavSearchPlaceholder}>
 $#                <li>
 $#                  <a href=@{SearchR}> _{MsgNavSearchBtn}
-                <li .active>
-                  <a href=@{AddR}>    _{MsgNavAddBtn}
                 <li .divider-vertical>
+                <li :checkMaybe mcurrentRoute isAddRoute :.active>
+                  <a href=@{AddR}>    _{MsgNavAddBtn}
                 $maybe Entity userId (User name _) <- mAuth
-                  <li .pull-right>
+                  <li :checkMaybe mcurrentRoute isUserRoute:.active>
 $#              <img src=#{gravatar Settings.tinyUserpic name}
 $#                   alt=userpic />
                     <a href=@{UserProfileR name}> #{name}
                   <li>
                     <a href=@{AuthR LogoutR}> _{MsgNavSignoutBtn}
                 $nothing
-                  <li .pull-rigth>
+                  <li .pull-rigth
+                      :checkMaybe mcurrentRoute isLoginRoute:.active>
                     <a href=@{AuthR LoginR}>  _{MsgNavSigninBtn}
 
     $maybe msg <- mmsg

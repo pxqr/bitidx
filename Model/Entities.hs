@@ -6,11 +6,14 @@ module Model.Entities
        , formatEventTime
        ) where
 
-import Import
+import Prelude
+import Data.Monoid
 import Data.Text as T
 import Data.Time
 import System.Locale
+import Yesod
 
+import Model
 
 class LastUpdated a where
   lastUpdated :: a -> UTCTime

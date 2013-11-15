@@ -24,6 +24,7 @@ module Widget
        , metadataEditorPage
 
          -- ** Discussion
+       , commentForm
        , discussionPage
 
          -- * User
@@ -96,7 +97,6 @@ showSize = toLazyText . truncate
     (gib, mib, kib) = (1024 ^ 3, 1024 ^ 2, 1024 ^ 1)
 
 type BlankForm = (Widget, Enctype)
-type CommentView = (Entity Comment, Entity User)
 
 {-----------------------------------------------------------------------
 --  Add release page
@@ -223,26 +223,9 @@ homePage releases = do
   $(widgetFile "homepage")
   releaseListW releases
 
-discussionW :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
-discussionW (formWidget, formEnctype) Release {..} comments Permissions {..} = do
-  $(widgetFile "torrent/discussion")
-
-discussionPage :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
-discussionPage form release @ Release {..} comments permissions = do
-  setTitle (toHtml releaseName)
-  discussionW form release comments permissions
-
-releaseW :: Release -> Permissions -> Widget
-releaseW Release {..} Permissions {..} = $(widgetFile "torrent/release")
-
-releasePage :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
-releasePage form release @ Release {..} comments permissions = do
-  setTitle (toHtml releaseName)
-  releaseW release permissions
-  discussionW form release comments permissions
-
-releaseListW :: [Release] -> Widget
-releaseListW releases = $(widgetFile "torrent/list")
+{-----------------------------------------------------------------------
+--  Search page
+-----------------------------------------------------------------------}
 
 searchW :: Maybe T.Text -> Widget
 searchW msearchString = $(widgetFile "search")
@@ -253,6 +236,37 @@ searchPage msearchString releases = do
   searchW msearchString
   when (isJust msearchString) $ do
     releaseListW releases
+
+{-----------------------------------------------------------------------
+--  Release page
+-----------------------------------------------------------------------}
+
+type CommentView = (Entity Comment, Entity User)
+
+commentForm :: Form Textarea
+commentForm = renderBootstrap $ do
+  areq textareaField "" Nothing
+
+discussionW :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
+discussionW (formWidget, formEnctype) Release {..} comments Permissions {..} = do
+  $(widgetFile "torrent/discussion")
+
+discussionPage :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
+discussionPage form release @ Release {..} comments permissions = do
+  setTitle (toHtml releaseName)
+  discussionW form release comments permissions
+
+releaseListW :: [Release] -> Widget
+releaseListW releases = $(widgetFile "torrent/list")
+
+releaseW :: Release -> Permissions -> Widget
+releaseW Release {..} Permissions {..} = $(widgetFile "torrent/release")
+
+releasePage :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
+releasePage form release @ Release {..} comments permissions = do
+  setTitle (toHtml releaseName)
+  releaseW release permissions
+  discussionW form release comments permissions
 
 {-----------------------------------------------------------------------
 --  User pages

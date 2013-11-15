@@ -13,6 +13,7 @@ module Handler.Release
        , getReleaseR
        , postReleaseR
        , deleteReleaseR
+       , handleReleaseCommentR
 
        , getDiscussionR
        , postDiscussionR
@@ -30,6 +31,7 @@ import Import as I
 import Data.Aeson.TH
 import Data.BEncode as BE
 import Data.ByteString as BS
+import Data.ByteString.Base16 as Base16
 import Data.ByteString.Lazy as BL
 import Data.Conduit
 import Data.Conduit.Lazy
@@ -135,27 +137,29 @@ addNewReleaseT name authorId torrent = do
 -----------------------------------------------------------------------}
 
 type ReleasePresentation a = Release -> [CommentView] -> Handler a
+type ReleaseInfo = (Release, User, CommentView)
 
 commentToEntry :: CommentView -> FeedEntry (Route App)
-commentToEntry (Entity _ Comment {..}, _) = FeedEntry
-  { feedEntryLink    = ReleaseR commentTorrentId
+commentToEntry (Entity commentId Comment {..}, Entity _ User {..}) = FeedEntry
+  { feedEntryLink    = ReleaseCommentR commentTorrentId commentId
   , feedEntryUpdated = commentAdded
-  , feedEntryTitle   = "" -- TODO
+  , feedEntryTitle   = userScreenName <> " wrote: " <> T.take 16 commentBody
   , feedEntryContent = markdown def $ TL.fromStrict commentBody
   }
 
 releaseToFeed :: Release -> [CommentView] -> Feed (Route App)
-releaseToFeed release @ (Release ih name _ _ mdesc _) comments = Feed
-  { feedTitle       = name
-  , feedLinkSelf    = ReleaseR ih
+releaseToFeed release @ Release {..} comments = Feed
+  { feedTitle       = releaseName
+  , feedLinkSelf    = ReleaseR releaseTorrentId
   , feedLinkHome    = HomeR
   , feedAuthor      = "someone" -- TODO
   , feedDescription = fromMaybe "No description" $ do
-      desc <- mdesc
+      desc <- releaseDescription
       return $ markdown def $ TL.fromStrict desc
+
   , feedLanguage    = "en"
   , feedUpdated     = let times = lastUpdated release : fmap (lastUpdated . fst) comments
-                      in L.minimum times
+                      in L.maximum times
   , feedEntries     = commentToEntry <$> comments
   }
 
@@ -167,12 +171,8 @@ getReleaseAtom release comments = atomFeed (releaseToFeed release comments)
 
 feedLink :: Route App -> T.Text -> Widget
 feedLink   route title = do
-  atomLink route title
---  rssLink  route title
-
-commentForm :: Form Textarea
-commentForm = renderBootstrap $ do
-  areq textareaField "" Nothing
+  atomLink route $ "RSS: "  <> title
+  rssLink  route $ "Atom: " <> title
 
 getReleaseJson :: ReleasePresentation Value
 getReleaseJson release comments = pure $ object
@@ -204,10 +204,10 @@ getReleaseR ih = do
   case metorrent of
     Nothing      -> notFound
     Just (Entity _ release) -> selectRep $ do
+      provideRep $ getReleaseRss  release comments
       provideRep $ getReleaseAtom release comments
---      provideRep $ getReleaseRss  release comments
       provideRep $ getReleaseHtml release comments
---      provideRep $ getReleaseJson release comments
+      provideRep $ getReleaseJson release comments
 
 postReleaseR :: InfoHash -> Handler Html
 postReleaseR = deleteReleaseR
@@ -218,6 +218,9 @@ deleteReleaseR ih = do
     reqPermission editor releaseAuthor $ do
        runDB (I.delete releaseId)
        redirect HomeR
+
+handleReleaseCommentR :: InfoHash -> CommentId -> Handler Html
+handleReleaseCommentR _ _ = redirect HomeR
 
 {-----------------------------------------------------------------------
 --  Torrent file resource

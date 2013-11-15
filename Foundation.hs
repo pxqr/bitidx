@@ -20,12 +20,17 @@ import Model
 import Text.Jasmine (minifym)
 import Text.Hamlet (hamletFile)
 import System.Log.FastLogger (Logger)
-import Data.Text
+import Data.ByteString.Base16 as Base16
+import Blaze.ByteString.Builder.ByteString
+import Data.Monoid
+import Data.Text as T
+import Data.Text.Encoding as T
+import Data.Torrent.InfoHash
 import Data.Version
+import Network.Gravatar hiding (NotFound)
 import Paths_bitidx
 
-import Data.Torrent.InfoHash
-import Network.Gravatar hiding (NotFound)
+import Model.Entities
 
 
 data App = App
@@ -106,18 +111,19 @@ instance Yesod App where
 
     urlRenderOverride y (StaticR s) =
         Just $ uncurry (joinPath y (Settings.staticRoot $ settings y)) $ renderRoute s
+
+    urlRenderOverride y (ReleaseCommentR ih cid) = Just $
+         uncurry (joinPath y (appRoot (settings y))) (renderRoute (ReleaseR ih))
+      <> copyByteString "#"
+      <> copyByteString (T.encodeUtf8 (persistId cid))
+
     urlRenderOverride _ _ = Nothing
 
     authRoute _ = Just $ AuthR LoginR
 
-    -- This function creates static content files in the static folder
-    -- and names them based on a hash of their content. This allows
-    -- expiration dates to be set far in the future without worry of
-    -- users receiving stale content.
     addStaticContent =
         addStaticContentExternal minifym genFileName Settings.staticDir (StaticR . flip StaticRoute [])
       where
-        -- Generate a unique filename based on the content itself
         genFileName lbs
             | development = "autogen-" ++ base64md5 lbs
             | otherwise   = base64md5 lbs

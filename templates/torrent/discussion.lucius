@@ -5,7 +5,7 @@ form.add-comment textarea {
 }
 
 article.comment:target {
-//    border: 1px solid #7CC7EF;
+    border: 1px solid #7CC7EF;
 }
 
 .comment-body {
@@ -17,7 +17,6 @@ article.comment:target {
     width:  50px;
     box-shadow: 1px 1px 2px #ccc;
 }
-
 
 .comment-message code:before {
     content: "> ";

@@ -84,6 +84,8 @@ library
                  , fast-logger                   >= 0.3
 
                  , yesod-newsfeed
+                 , base16-bytestring
+                 , blaze-builder
                  , esqueleto
                  , cereal
                  , markdown

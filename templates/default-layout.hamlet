@@ -12,7 +12,7 @@ $#    <header .header>
                          placeholder=_{MsgNavSearchPlaceholder}>
 $#                <li>
 $#                  <a href=@{SearchR}> _{MsgNavSearchBtn}
-                <li>
+                <li .active>
                   <a href=@{AddR}>    _{MsgNavAddBtn}
                 <li .divider-vertical>
                 $maybe Entity userId (User name _) <- mAuth
@@ -30,6 +30,15 @@ $#                   alt=userpic />
       <div #message .alert-info>
         <a .close href="#" data-dismiss=alert>&times;
         #{msg}
+
+    <nav>
+      <ul .breadcrumb>
+        $forall bc <- parents
+          <li>
+            <a href=@{fst bc}> #{snd bc}
+            <span .divider>/
+        <li .active>
+           #{title}
 
     <div .main .row-fluid role=main>
       ^{widget}

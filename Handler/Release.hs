@@ -137,6 +137,8 @@ addNewReleaseT name authorId torrent = do
 -----------------------------------------------------------------------}
 
 type ReleasePresentation a = Release -> [CommentView] -> Handler a
+
+-- TODO show release author info
 type ReleaseInfo = (Release, User, CommentView)
 
 commentToEntry :: CommentView -> FeedEntry (Route App)

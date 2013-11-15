@@ -94,6 +94,8 @@ instance Yesod App where
         -- value passed to hamletToRepHtml cannot be a widget, this allows
         -- you to use normal widget features in default-layout.
 
+        (title, parents) <- breadcrumbs
+
         mAuth <- maybeAuth
         pc <- widgetToPageContent $ do
             $(combineStylesheets 'StaticR
@@ -157,6 +159,19 @@ instance YesodAuth App where
 
     authPlugins _ = [ authGoogleEmail]
     authHttpManager = httpManager
+
+instance YesodBreadcrumbs App where
+  breadcrumb  HomeR             = return ("Home"       , Nothing)
+  breadcrumb (SearchR        )  = return ("Search"     , Just HomeR)
+  breadcrumb (AddR           )  = return ("Add"        , Just HomeR)
+  breadcrumb (ReleaseR     ih)  = return (longHex ih   , Just HomeR)
+  breadcrumb (DescriptionR ih)  = return ("Description", Just (ReleaseR ih))
+  breadcrumb (MetadataR    ih)  = return ("Metadata"   , Just (ReleaseR ih))
+  breadcrumb (DiscussionR  ih)  = return ("Discussion" , Just (ReleaseR ih))
+  breadcrumb (UserProfileR uid) = return (uid          , Just HomeR)
+  breadcrumb (UserEditR    uid) = return ("Edit"       , Just (UserProfileR uid))
+  breadcrumb _                  = return (""           , Just HomeR)
+
 
 instance RenderMessage App FormMessage where
     renderMessage _ _ = defaultFormMessage

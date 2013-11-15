@@ -9,11 +9,9 @@ $with torrent @ (Torrent {..}) <- releaseFile
     <li .active> Specialization
 
   <div .social>
-    <h4> #{longHex releaseTorrentId}
     <a .btn .btn-mini>
       <i .icon-star>
       Star
-
     <a .btn .btn-mini href=@{ReleaseR releaseTorrentId}>
       <img src="http://poptech.org/system/web_images/884/original/rss_icon.png?1297099441">
       Feed

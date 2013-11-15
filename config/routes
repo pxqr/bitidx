@@ -11,9 +11,9 @@
 /torrent                       AddR         GET POST
 /torrent/#InfoHash             ReleaseR     GET POST DELETE
 /torrent/#InfoHash/description DescriptionR GET POST
-/torrent/#InfoHash/discussion  DiscussionR  GET POST
 /torrent/#InfoHash/metadata    MetadataR    GET POST
 /torrent/#InfoHash/torrent     TorrentFileR GET
+/torrent/#InfoHash/discussion  DiscussionR  GET POST
 /torrent/#InfoHash/comment/#CommentId  ReleaseCommentR
 
 /error/invalid-file            InvalidTorrentFileR GET

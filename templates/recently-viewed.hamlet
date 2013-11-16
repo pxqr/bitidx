@@ -1,0 +1,8 @@
+$if not $ L.null infohashes
+  <div>
+    <h3> Recently viewed (#{show $ L.length infohashes}) ...
+    <div>
+      $forall ih <- infohashes
+        <div>
+          <a href=@{ReleaseR ih}>
+            #{longHex ih}

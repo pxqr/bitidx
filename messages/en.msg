@@ -71,10 +71,19 @@ AddCommentBtn:  Add comment
 AddCommentSuccess: Comment has been added...
 
 # torrent list widget
-ListHashCol:   Hash
-ListNameCol:   Name
-ListSizeCol:   Size
-ListAuthorCol: Author
+## thead
+ReleaseListHashColCaption:   Hash
+ReleaseListHashColTitle:     Magnet link hash sum
+ReleaseListNameColCaption:   Name
+ReleaseListNameColTitle:     Release name
+ReleaseListSizeColCaption:   Size
+ReleaseListSizeColTitle:     Total size of torrent files
+ReleaseListAuthorColCaption: Author
+ReleaseListAuthorColTitle:   Uploaded by
+## tbody
+ReleaseListTitle:       Go to release description and discussion
+ReleaseListAuthorTitle: Go to author profile
+ReleaseListMagnetLink:  Download using magnet link
 
 # the edit description page
 EditDescriptionLegend:    Edit release description...

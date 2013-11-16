@@ -4,20 +4,37 @@ $else
   <table .torrent-list>
     <thead>
       <tr>
-        <th #hash   .hidden-phone>    _{MsgListHashCol}
-        <th #name>                    _{MsgListNameCol}
-        <th #size>                    _{MsgListSizeCol}
-        <th #author .visible-desktop> _{MsgListAuthorCol}
+        <th #hash-col   title=_{MsgReleaseListHashColTitle}  .hidden-phone>
+          _{MsgReleaseListHashColCaption}
+        <th #magnet-col>
+        <th #name-col   title=_{MsgReleaseListNameColTitle}>
+          _{MsgReleaseListNameColCaption}
+        <th #size-col   title=_{MsgReleaseListSizeColTitle}>
+          _{MsgReleaseListSizeColCaption}
+        <th #author-col title=_{MsgReleaseListAuthorColTitle} .visible-desktop>
+          _{MsgReleaseListAuthorColCaption}
     <tbody>
       $forall Release {..} <- releases
-        <tr>
+        <tr onclick="document.location='@{ReleaseR releaseTorrentId}'">
           $with Torrent {..} <- releaseFile
-            <td .hidden-phone>
-              <p title=#{longHex releaseTorrentId}>
+            <td #hash .hidden-phone title=#{longHex releaseTorrentId}>
+              <span>
                 #{shortHex releaseTorrentId}
-            <td>
-              <a href=@{ReleaseR releaseTorrentId}>
+
+            <td .magnet-link title=_{MsgReleaseListMagnetLink}>
+              <a .btn .btn-mini disabled
+                 href=#{show $ simpleMagnet releaseFile}>
+                <i .icon-magnet>
+
+            <td .release     title=_{MsgReleaseListTitle}>
+              <a  href=@{ReleaseR releaseTorrentId}>
                 #{releaseName}
+
             $with totalSize <- contentLength $ idLayoutInfo tInfoDict
-              <td title=#{show totalSize <> " Bytes"}>
+              <td #size title=#{show totalSize <> " Bytes"}>
                 #{showSize totalSize}
+
+            <td .visible-desktop title=_{MsgReleaseListAuthorTitle}>
+              <a href=TODO>
+                <img src=TODO>
+                TODO

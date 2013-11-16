@@ -57,7 +57,8 @@ body {
 }
 
 .footer {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #ccc;
+    background-color: whiteSmoke;
     padding-top: 1em;
     text-align: center;
 }

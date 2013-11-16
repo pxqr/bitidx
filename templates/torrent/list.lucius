@@ -1,5 +1,5 @@
 .torrent-list {
-
+    width: 100%;
 }
 
 .torrent-list a[href]:visited {
@@ -9,14 +9,14 @@
 
 .torrent-list tbody tr {
     width: 100%;
-    margin: 1em;
+    margin: 0.3em 1em;
 }
 
 .torrent-list tbody tr:hover {
     background-color: #eee;
 }
 
-.torrent-list #hash  {
+.torrent-list #hash-col  {
     width: 100px;
 }
 
@@ -24,6 +24,15 @@
     padding: 1em;
 }
 
+#magnet-link {
+    padding: 0;
+}
+
 .torrent-list #hash {
-    width: 20%
+    text-align: center;
+    font-family: monospace;
+}
+
+.torrent-list #size {
+    text-align: right;
 }

@@ -58,10 +58,18 @@ HdrNoComments:  нет комментариев
 AddCommentBtn:  Добавить комментарий
 
 # torrent list widget
-ListHashCol:   Хеш
-ListNameCol:   Имя
-ListSizeCol:   Размер
-ListAuthorCol: Автор
+## thead
+ReleaseListHashColCaption:   Хеш
+ReleaseListHashColTitle:     TODO
+ReleaseListNameColCaption:   Имя
+ReleaseListNameColTitle:     Release name
+ReleaseListSizeColCaption:   Размер
+ReleaseListSizeColTitle:     Полный размер раздачи
+ReleaseListAuthorColCaption: Автор
+ReleaseListAuthorColTitle:   Кем опубликовано
+## tbody
+ReleaseListTitle:       Перейти к описанию раздачи
+ReleaseListAuthorTitle: Перейти к профилю автора
 
 # the edit description page
 EditDescriptionLegend: Изменить описание раздачи...

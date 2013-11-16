@@ -63,6 +63,7 @@ import Data.Torrent.Layout
 import Data.Torrent.InfoHash
 import Data.Torrent.Magnet
 import Data.Torrent.Piece
+import Data.Torrent.Client
 
 import Handler.User.Permissions
 
@@ -152,53 +153,124 @@ descriptionPage form ih = do
 -- TODO detalize fields
 -- TODO use yesod forms for search form
 
-announceInput :: FieldSettings App
-announceInput = "Announce"
-
-commentInput :: FieldSettings App
-commentInput = FieldSettings
-  { fsLabel   = "Comment"
-  , fsTooltip = Just "tooltip - usage of this field"
-  , fsId      = Just "commentId"
-  , fsName    = Just "commentName"
-  , fsAttrs   = [("placeholder", "freeform author comment")]
-  }
-
-createdByInput :: FieldSettings App
-createdByInput = "Created by"
-
-creationDateInput :: FieldSettings App
-creationDateInput = "Creation date"
-
-encodingInput :: FieldSettings App
-encodingInput = "Encoding"
-
-publisherURLInput :: FieldSettings App
-publisherURLInput = "Publisher URL"
-
 uriToText :: URI -> T.Text
 uriToText = T.pack . show
 
--- note that text is always parsable so we can safely omit the Nothing case
-textToURI :: T.Text -> URI
-textToURI = maybe err id . parseURI . T.unpack
+textToURI :: T.Text -> Maybe URI
+textToURI = parseURI . T.unpack
+
+uriField :: Field Handler URI
+uriField =  Field
+  { fieldParse = \ ts fs -> do
+       emuri <- fieldParse urlField ts fs
+       return $ (textToURI =<<) <$> emuri
+  , fieldView = \theId name attrs val ->
+       fieldView parent theId name attrs (uriToText <$> val)
+  , fieldEnctype = fieldEnctype parent
+  }
   where
-    err = error "textToURL: impossible"
+    parent = urlField :: Field Handler T.Text
+
+textareaTextField :: Field Handler T.Text
+textareaTextField = Field
+  { fieldParse   = \ ts fs -> do
+       emTextarea <- fieldParse textareaField ts fs
+       return $ fmap unTextarea <$> emTextarea
+  , fieldView = \theId name attrs val ->
+       fieldView parent theId name attrs (Textarea <$> val)
+  , fieldEnctype = fieldEnctype parent
+  }
+  where
+    parent = textareaField :: Field Handler Textarea
+
+-- TODO validate if announce url is valid (by spec)
+announceInput :: FieldSettings App
+announceInput =  FieldSettings
+  { fsLabel   = SomeMessage MsgAnnounceLabel
+  , fsTooltip = Just $ SomeMessage MsgAnnounceTooltip
+  , fsId      = Just "announce"
+  , fsName    = Just "announce"
+  , fsAttrs   = [ ("placeholder", "Tracker URL...")
+                ]
+  }
+
+announceListInput :: FieldSettings App
+announceListInput =  FieldSettings
+  { fsLabel   = SomeMessage MsgAnnounceListLabel
+  , fsTooltip = Just $ SomeMessage MsgAnnounceListTooltip
+  , fsId      = Just "announceList"
+  , fsName    = Just "announceList"
+  , fsAttrs   = [ ("placeholder", "Tracker tiers...") ]
+  }
+
+announceListField :: Field Handler [[URI]]
+announceListField = undefined -- uriField
+
+commentInput :: FieldSettings App
+commentInput  = FieldSettings
+  { fsLabel   = SomeMessage MsgCommentLabel
+  , fsTooltip = Just $ SomeMessage MsgCommentTooltip
+  , fsId      = Just "comment"
+  , fsName    = Just "comment"
+  , fsAttrs   = [("placeholder", "Freeform author comment...")]
+  }
+
+createdByInput :: FieldSettings App
+createdByInput  = FieldSettings
+  { fsLabel   = SomeMessage MsgCreatedByLabel
+  , fsTooltip = Just $ SomeMessage MsgCreatedByTooltip
+  , fsId      = Just "createdBy"
+  , fsName    = Just "createdBy"
+  , fsAttrs   = [("placeholder", "Software name...")]
+  }
+
+createdByField :: Field Handler T.Text
+createdByField = selectFieldList $ L.map (\ x -> (x, x)) names
+  where
+    names = L.map (T.pack . L.tail . show) ([succ minBound..maxBound] :: [ClientImpl])
+
+creationDateInput :: FieldSettings App
+creationDateInput =  FieldSettings
+  { fsLabel   = SomeMessage MsgCreationDateLabel
+  , fsTooltip = Just $ SomeMessage MsgCreationDateTooltip
+  , fsId      = Just "creationDate"
+  , fsName    = Just "creationDate"
+  , fsAttrs   = []
+  }
+
+encodingInput :: FieldSettings App
+encodingInput  = FieldSettings
+  { fsLabel   = SomeMessage MsgEncodingLabel
+  , fsTooltip = Just $ SomeMessage MsgEncodingTooltip
+  , fsId      = Just "encoding"
+  , fsName    = Just "encoding"
+  , fsAttrs   = [("placeholder", "Character set...")]
+  }
 
 encodingField :: Field Handler T.Text
 encodingField = textField
 
+publisherURLInput :: FieldSettings App
+publisherURLInput =  FieldSettings
+  { fsLabel   = SomeMessage MsgPublisherURLLabel
+  , fsTooltip = Just $ SomeMessage MsgPublisherURLTooltip
+  , fsId      = Just "publisherURL"
+  , fsName    = Just "publisherURL"
+  , fsAttrs   = [("placeholder", "TODO")]
+  }
+
 metadataForm :: Torrent -> Form Torrent
 metadataForm Torrent {..} = renderBootstrap $ do Torrent
-  <$> (textToURI <$> areq urlField announceInput (Just (uriToText tAnnounce)))
-  <*> pure tAnnounceList
-  <*> (fmap unTextarea <$> aopt textareaField commentInput (Just (Textarea <$> tComment)))
-  <*> aopt textField createdByInput (Just tCreatedBy)
-  <*> pure tCreationDate
-  <*> aopt encodingField encodingInput (Just tEncoding)
+  <$> areq uriField          announceInput     (Just tAnnounce)
+  <*> pure tAnnounceList     -- TODO
+--  <*> aopt announceListField announceListInput (Just tAnnounceList)
+  <*> aopt textareaTextField commentInput      (Just tComment)
+  <*> aopt createdByField    createdByInput    (Just tCreatedBy)
+  <*> pure tCreationDate     -- TODO
+  <*> aopt encodingField     encodingInput     (Just tEncoding)
   <*> pure tInfoDict
-  <*> pure tPublisher
-  <*> (fmap textToURI <$> aopt urlField publisherURLInput (Just (uriToText <$> tPublisherURL)))
+  <*> pure tPublisher        -- TODO
+  <*> aopt uriField          publisherURLInput (Just tPublisherURL)
   <*> pure tSignature
 
 metadataEditorW :: BlankForm -> InfoHash -> Widget

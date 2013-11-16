@@ -2,6 +2,11 @@
 * DONE /torrent/#InfoHash accept both base16, base32, base64 encoding
 need to modify Read InfoHash and FromChunk InfoHash instances
 * WONT shorten release route to /#InfoHash ?
+* TODO tCreatedBy
+  + add to fields selectors
+  + highlight in metadataW if createdBy is valid ClientInfo
+* TODO restrict length of torrent file, description etc
+* TODO tags
 * TODO "Category / ReleaseName / Specialization" in breadcumbs
 * TODO parent torrent and(or?) breadcrumbs (for rips)
 * TODO recently viewed

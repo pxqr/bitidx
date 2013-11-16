@@ -73,3 +73,17 @@ EditDescriptionLegend: Edit release description...
 # the edit metadata page
 EditMetadataLegend: Edit torrent metadata...
 EditMetadataCommentFieldLabel: Comment
+AnnounceLabel:       Announce
+AnnounceTooltip:     TODO tooltip
+AnnounceListLabel:   Announce list
+AnnounceListTooltip: TODO tooltip
+CommentLabel:        Comment
+CommentTooltip:      TODO tooltip
+CreatedByLabel:      Created by
+CreatedByTooltip:    TODO Name of software by which produced this file
+CreationDateLabel:   Creation date
+CreationDateTooltip: TODO tooltip
+EncodingLabel:       Encoding
+EncodingTooltip:     TODO tooltip
+PublisherURLLabel:   Publisher URL
+PublisherURLTooltip: TODO tooltip

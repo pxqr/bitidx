@@ -30,11 +30,14 @@ EditProfileBtnTitle:   TODO
 ## user edit profile
 BackToProfileBtnCaption: Back to profile
 EditUserLegend:  Edit user info...
+MsgEditUserSuccess: Profile has been modified...
 
 # search
 NoResults: No results
 
 # the release page
+AddReleaseSuccess:     Release has been added...
+DeletedReleaseSuccess: Release has been deleted...
 ReleaseFeedBtnCaption: Feed
 ReleaseFeedBtnTitle:   Copy this URL to RSS/Atom feed and paste in your feed reader
 DescriptionTab:    Description
@@ -60,6 +63,7 @@ MagnetBtnTitle:    Open magnet link (recommended)
 HdrComments:    comments
 HdrNoComments:  no comments
 AddCommentBtn:  Add comment
+AddCommentSuccess: Comment has been added...
 
 # torrent list widget
 ListHashCol:   Hash
@@ -68,9 +72,11 @@ ListSizeCol:   Size
 ListAuthorCol: Author
 
 # the edit description page
-EditDescriptionLegend: Edit release description...
+EditDescriptionLegend:    Edit release description...
+DescriptionUpdateSuccess: Description has been updated...
 
 # the edit metadata page
+MetadataUpdateSuccess: Metadata has been updated...
 EditMetadataLegend: Edit torrent metadata...
 EditMetadataCommentFieldLabel: Comment
 AnnounceLabel:       Announce

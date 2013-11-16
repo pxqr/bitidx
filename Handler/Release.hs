@@ -118,7 +118,7 @@ postAddR = do
         if not (isJust added)
           then redirect (AlreadyExistR ih)
           else do
-               setMessage addedSuccessfullyMessage
+               setMessageI MsgAddReleaseSuccess
                redirect $ ReleaseR ih
 
 addNewReleaseT :: T.Text -> UserId -> Torrent -> YesodDB App (Maybe (Key Release))
@@ -219,6 +219,7 @@ deleteReleaseR ih = do
   withRelease ih $ \ (Entity releaseId Release {..}) -> do
     reqPermission editor releaseAuthor $ do
        runDB (I.delete releaseId)
+       setMessageI MsgDeletedReleaseSuccess
        redirect HomeR
 
 handleReleaseCommentR :: InfoHash -> CommentId -> Handler Html
@@ -268,6 +269,7 @@ postDescriptionR ih = do
     ((result, _), _) <- runFormPost (descriptionForm (releaseDesc release))
     withFormResult result $ \ desc' -> do
       _ <- runDB $ update releaseId (updateDescription desc')
+      setMessageI MsgDescriptionUpdateSuccess
       redirect (ReleaseR ih)
 
 {-----------------------------------------------------------------------
@@ -291,6 +293,7 @@ postMetadataR ih = do
     ((result, _), _) <- runFormPost (metadataForm releaseFile)
     withFormResult result $ \ torrent -> do
       _ <- runDB $ I.update releaseId [ReleaseFile =. torrent]
+      setMessageI MsgMetadataUpdateSuccess
       redirect (ReleaseR ih)
 
 {-----------------------------------------------------------------------
@@ -328,4 +331,5 @@ postDiscussionR ih = do
       time   <- liftIO $ getCurrentTime
       liftIO $ print commentBody
       _ <- runDB $ I.insert $ Comment ih time userId commentBody
-      redirect $ ReleaseR ih
+      setMessageI MsgAddCommentSuccess
+      redirect (ReleaseR ih)

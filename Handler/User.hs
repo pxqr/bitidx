@@ -49,4 +49,5 @@ postUserEditR userName = do
     ((result, formWidget), formEnctype) <- runFormPost $ userEditForm user
     withFormResult result $ \ userEdit -> do
       runDB $ update userId $ userUpdates userEdit
+      setMessageI MsgEditUserSuccess
       redirect $ UserProfileR userName

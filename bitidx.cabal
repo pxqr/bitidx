@@ -25,6 +25,7 @@ library
                      Handler.Home
                      Handler.Search
                      Handler.Release
+                     Handler.Release.Recent
                      Handler.User
                      Handler.User.Permissions
                      Handler.Help

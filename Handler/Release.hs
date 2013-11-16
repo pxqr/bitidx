@@ -58,8 +58,10 @@ import Yesod.RssFeed
 import Model.Entities
 import Settings as Settings
 import Network.Gravatar
+
 import Widget
 import Handler.User.Permissions
+import Handler.Release.Recent
 
 
 withRelease :: InfoHash -> (Entity Release -> Handler a) -> Handler a
@@ -184,11 +186,13 @@ getReleaseJson release comments = pure $ object
 
 getReleaseHtml :: ReleasePresentation Html
 getReleaseHtml release @ Release {..} comments = do
-  permissions <- optPermissions releaseAuthor
-  form  <- generateFormPost commentForm
+  permissions   <- optPermissions releaseAuthor
+  form          <- generateFormPost commentForm
+  recent        <- getRecentlyViewed
+  addRecentlyViewed releaseTorrentId
   defaultLayout $ do
     feedLink (ReleaseR releaseTorrentId) releaseName
-    releasePage form release comments permissions
+    releasePage form release comments permissions recent
 
 selectComments :: InfoHash -> YesodDB App [CommentView]
 selectComments infohash =

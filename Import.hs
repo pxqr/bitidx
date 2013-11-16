@@ -12,6 +12,7 @@ import           Yesod.Auth
 import           Control.Applicative  as Import (pure, (<$>), (<*>))
 import           Control.Monad        as Import
 import           Data.Maybe           as Import
+import           Data.Default         as Import
 import           Data.Text            as Import (Text)
 import           Data.List as L
 import           Foundation           as Import

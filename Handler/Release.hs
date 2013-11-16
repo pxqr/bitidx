@@ -71,7 +71,8 @@ modifyRelease :: InfoHash -> Permission
               -> (Entity Release -> Handler a) -> Handler a
 modifyRelease ih permission action = do
   withRelease ih $ \ (e @ (Entity _ Release {..})) -> do
-    reqPermission permission releaseAuthor (action e)
+    reqPermission permission releaseAuthor $ do
+      action e
 
 {-----------------------------------------------------------------------
 --  Error handlers
@@ -183,7 +184,7 @@ getReleaseJson release comments = pure $ object
 
 getReleaseHtml :: ReleasePresentation Html
 getReleaseHtml release @ Release {..} comments = do
-  permissions <- getPermissions releaseAuthor
+  permissions <- optPermissions releaseAuthor
   form  <- generateFormPost commentForm
   defaultLayout $ do
     feedLink (ReleaseR releaseTorrentId) releaseName
@@ -305,7 +306,7 @@ type DiscussionPresentation a = Release -> [CommentView] -> Handler a
 getDiscussionHtml :: DiscussionPresentation Html
 getDiscussionHtml release @ Release {..} comments = do
   let ih = idInfoHash $ tInfoDict releaseFile
-  permissions <- getPermissions releaseAuthor
+  permissions <- optPermissions releaseAuthor
   form  <- generateFormPost commentForm
   defaultLayout $ discussionPage form release comments permissions
 

@@ -1,6 +1,7 @@
 module Handler.User.Permissions
        ( Permissions (..)
-       , getPermissions
+       , reqPermissions
+       , optPermissions
 
        , Permission (..)
        , editor
@@ -12,32 +13,36 @@ import Import
 import Data.Text as T
 import Yesod.Auth
 
+
 data Permissions = Permissions
   { canComment :: Bool
   , canEdit    :: Bool
   }
 
-getPermissions :: UserId -> Handler Permissions
-getPermissions author = mkPermissions <$> maybeAuth
-  where
-    mkPermissions Nothing = Permissions
-      { canComment = False
-      , canEdit    = False
-      }
-    mkPermissions (Just (Entity userId _)) = Permissions
-      { canComment = True
-      , canEdit    = userId == author
-      }
+instance Default Permissions where
+  def = Permissions False False
 
-type Permission = (Permissions -> Bool, T.Text)
+mkPermissions :: UserId -> Entity User -> Permissions
+mkPermissions author (Entity userId _) = Permissions
+  { canComment = True
+  , canEdit    = userId == author
+  }
+
+reqPermissions :: UserId -> Handler Permissions
+reqPermissions author = mkPermissions author <$> requireAuth
+
+optPermissions :: UserId -> Handler Permissions
+optPermissions author = maybe def (mkPermissions author) <$> maybeAuth
+
+type Permission = (Permissions -> Bool, AppMessage)
 
 editor :: Permission
-editor = (canEdit, "You need editor privileges for this action")
+editor    = (canEdit, MsgPermissionDeniedEdit)
 
 commenter :: Permission
-commenter = (canEdit, "You need commenter privileges for this action")
+commenter = (canEdit, MsgPermissionDeniedComment)
 
 reqPermission :: Permission -> UserId -> Handler a -> Handler a
 reqPermission (selector, msg) author action = do
-  permissions <- getPermissions author
-  if selector permissions then action else permissionDenied msg
+  permissions <- reqPermissions author
+  if selector permissions then action else permissionDeniedI msg

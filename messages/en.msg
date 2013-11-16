@@ -24,13 +24,18 @@ FooterSourceBtn: Source
 FooterIssuesBtn: Issues
 
 # user
+## permissions
+LoginRequired:           You need to login to perform this action
+PermissionDeniedEdit:    You need editor privileges for this action
+PermissionDeniedComment: You need commenter privileges for this action
+
 ## user profile
 EditProfileBtnCaption: Редактировать профиль
 EditProfileBtnTitle:   TODO
 ## user edit profile
 BackToProfileBtnCaption: Back to profile
 EditUserLegend:  Edit user info...
-MsgEditUserSuccess: Profile has been modified...
+EditUserSuccess: Profile has been modified...
 
 # search
 NoResults: No results

@@ -27,8 +27,8 @@ $with commentCount <- L.length comments
           <div .comment-message>
             #{markdown def $ TL.fromStrict msg}
 
-$if canComment
-  <form .add-comment
+$# $if canComment
+<form .add-comment
         method=post action=@{DiscussionR releaseTorrentId} enctype=#{formEnctype}>
     ^{formWidget}
     <div .form-actions>

@@ -72,7 +72,10 @@ ReleaseListTitle:       Перейти к описанию раздачи
 ReleaseListAuthorTitle: Перейти к профилю автора
 
 # the edit description page
-EditDescriptionLegend: Изменить описание раздачи...
+EditDescriptionLegend:    Изменить описание раздачи...
+DescriptionUpdateSuccess: Описание раздачи было успешно обновлено.
+NameLabel:                Имя
+DescriptionLabel:         Описание
 
 # the edit metadata page
 EditMetadataLegend: Изменить метаданные .torrent файла...

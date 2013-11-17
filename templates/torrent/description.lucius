@@ -11,11 +11,11 @@
     padding-right: 3em;
 }
 
-.form input[id=h2] {
+.form input[id=name] {
     width:      100%;
 }
 
-.form textarea {
+.form textarea[id=description] {
     resize:     vertical;
     display:    block;
     width:      100%;

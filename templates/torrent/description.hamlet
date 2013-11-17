@@ -6,5 +6,9 @@
     <div .form-inputs>
       ^{widget}
     <div .form-actions>
-      <a     .btn href=@{ReleaseR ih}      title=_{MsgBackBtnTitle}> _{MsgBackBtnCaption}
-      <input .btn .btn-primary type=submit title=_{MsgSaveBtnTitle} value=_{MsgSaveBtnCaption}>
+      <a     .btn href=@{ReleaseR ih}
+             title=_{MsgBackBtnTitle}
+             accesskey=B> _{MsgBackBtnCaption}
+      <input .btn .btn-primary type=submit
+             title=_{MsgSaveBtnTitle} accesskey=S
+             value=_{MsgSaveBtnCaption}>

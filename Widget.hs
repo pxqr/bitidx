@@ -131,15 +131,37 @@ addedSuccessfullyMessage = [shamlet|
 --  Description editor
 -----------------------------------------------------------------------}
 
+nameInput :: FieldSettings App
+nameInput =  FieldSettings
+  { fsLabel   = SomeMessage MsgNameLabel
+  , fsTooltip = Nothing
+  , fsId      = Just "name"
+  , fsName    = Just "name"
+  , fsAttrs   = [ ("placeholder", "Enter release name...")
+                , ("accesskey"  , "N")
+                ]
+  }
+
+descriptionInput :: FieldSettings App
+descriptionInput =  FieldSettings
+  { fsLabel   = SomeMessage MsgDescriptionLabel
+  , fsTooltip = Nothing
+  , fsId      = Just "description"
+  , fsName    = Just "description"
+  , fsAttrs   = [ ("placeholder", "Enter release description...")
+                , ("accesskey"  , "D")
+                ]
+  }
+
 data Description = Description
   { name        :: T.Text
   , description :: Maybe Textarea
   }
 
 descriptionForm :: Description -> Form Description
-descriptionForm Description {..} = renderBootstrap $ do
-  Description <$> areq textField     "Name"        (Just name)
-              <*> aopt textareaField "Description" (Just description)
+descriptionForm Description {..} = renderBootstrap $ do Description
+  <$> areq textField     nameInput        (Just name)
+  <*> aopt textareaField descriptionInput (Just description)
 
 descriptionW :: BlankForm -> InfoHash -> Widget
 descriptionW (widget, enctype) ih = $(widgetFile "torrent/description")
@@ -194,6 +216,7 @@ announceInput =  FieldSettings
   , fsId      = Just "announce"
   , fsName    = Just "announce"
   , fsAttrs   = [ ("placeholder", "Tracker URL...")
+                , ("accesskey"  , "a")
                 ]
   }
 

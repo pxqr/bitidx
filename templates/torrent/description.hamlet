@@ -1,5 +1,4 @@
-<form .form .form-horizontal
-      method=post action=@{DescriptionR ih} enctype=#{enctype}>
+<form .form .form-horizontal method=post action=@{DescriptionR ih} enctype=#{enctype}>
   <fieldset>
     <legend>
       <span> _{MsgEditDescriptionLegend}

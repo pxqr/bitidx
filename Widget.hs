@@ -148,16 +148,25 @@ alreadyExistW ih = do
 --  Add release page
 -----------------------------------------------------------------------}
 
+torrentInput :: FieldSettings App
+torrentInput =  FieldSettings
+  { fsLabel   = SomeMessage MsgTorrentFileLabel
+  , fsTooltip = Nothing
+  , fsId      = Just "torrent"
+  , fsName    = Just "torrent"
+  , fsAttrs   = []
+  }
+
 data NewRelease = NewRelease
   { torrentName :: T.Text
   , torrentFile :: Y.FileInfo
   }
 
 addForm :: Form NewRelease
-addForm = renderDivs $ do
+addForm = renderBootstrap $ do
   NewRelease
-    <$> areq textField "Name" Nothing
-    <*> fileAFormReq   "Choose a .torrent file"
+    <$> areq textField nameInput    Nothing
+    <*> fileAFormReq   torrentInput
 
 addReleasePage :: BlankForm -> Widget
 addReleasePage (formWidget, formEnctype) = do
@@ -403,7 +412,7 @@ helpW = do
 searchW :: Maybe T.Text -> Widget
 searchW msearchString = $(widgetFile "search")
 
-
+msgSearchPageTitle :: Maybe T.Text -> AppMessage
 msgSearchPageTitle = maybe MsgSearchNoQueryPageTitle MsgSearchResultsPageTitle
 
 searchPage :: Maybe T.Text -> [Release] -> Widget

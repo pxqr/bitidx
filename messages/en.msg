@@ -51,6 +51,10 @@ NotFoundPageTitle:           Not found...
 # the release add page
 AddReleasePageTitle:         Add torrent to database — Bitidx
 AddReleaseSuccess:           Torrent has been added...
+AddReleaseLegend:            Upload new torrent file...
+TorrentFileLabel:            Torrent
+AddReleaseBtnCaption:        Add
+AddReleaseBtnTitle:          Add torrent to database
 
 # the release page
 ReleasePageTitle name@Text: #{name} — Release

@@ -46,7 +46,7 @@ body {
 }
 
 .navbar .search-query {
-    width: 150px;
+//    width: 100%;
 }
 
 .main {

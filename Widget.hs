@@ -5,6 +5,14 @@ module Widget
        ( CommentView
        , BlankForm
 
+         -- * Utils
+       , withFormResult
+
+         -- * Errors
+       , invalidTorrentFileW
+       , torrentNotExistW
+       , alreadyExistW
+
          -- * Main Pages
        , homePage
        , searchPage
@@ -33,6 +41,9 @@ module Widget
          -- * User
        , userProfilePage
        , userEditPage
+
+         -- * Other pages
+       , helpW
        ) where
 
 import Prelude
@@ -102,6 +113,37 @@ showSize = toLazyText . truncate
 
 type BlankForm = (Widget, Enctype)
 
+formFailure reasons = do
+  defaultLayout $ do
+    setTitleI MsgFormFailurePageTitle
+    [whamlet|
+     $forall reason <- reasons
+       #{show reason}
+      |]
+
+withFormResult  FormMissing          _      = notFound
+withFormResult (FormFailure reasons) _      = formFailure reasons
+withFormResult (FormSuccess result ) action = action result
+
+{-----------------------------------------------------------------------
+--  Errors
+-----------------------------------------------------------------------}
+
+torrentNotExistW :: Widget
+torrentNotExistW = [whamlet|
+    <p .error> This torrent do not exist or probably has been deleted by the author.
+  |]
+
+invalidTorrentFileW :: Widget
+invalidTorrentFileW = do
+  setTitleI MsgInvalidTorrentPageTitle
+  $(widgetFile "error/invalid-file")
+
+alreadyExistW :: InfoHash -> Widget
+alreadyExistW ih = do
+  setTitleI MsgAlreadyExistPageTitle
+  $(widgetFile "error/already-exist")
+
 {-----------------------------------------------------------------------
 --  Add release page
 -----------------------------------------------------------------------}
@@ -119,7 +161,7 @@ addForm = renderDivs $ do
 
 addReleasePage :: BlankForm -> Widget
 addReleasePage (formWidget, formEnctype) = do
-  setTitle "Add torrent to database"
+  setTitleI MsgAddReleasePageTitle
   $(widgetFile "add/upload")
 
 addedSuccessfullyMessage :: Html
@@ -168,7 +210,7 @@ descriptionW (widget, enctype) ih = $(widgetFile "torrent/description")
 
 descriptionPage :: BlankForm -> InfoHash -> Widget
 descriptionPage form ih = do
-  setTitle "Release description"
+  setTitleI MsgEditDescriptionPageTitle
   descriptionW form ih
 
 {-----------------------------------------------------------------------
@@ -304,7 +346,7 @@ metadataEditorW (widget, enctype) ih = $(widgetFile "torrent/metadata-edit")
 
 metadataEditorPage :: BlankForm -> InfoHash -> Widget
 metadataEditorPage form ih = do
-  setTitle "Release metadata"
+  setTitleI MsgEditMetadataPageTitle
   metadataEditorW form ih
 
 metadataW :: Torrent -> Widget
@@ -317,7 +359,7 @@ metadataW torrent = $(widgetFile "torrent/metadata")
 homePage :: [Release] -> Widget
 homePage releases = do
   aDomId <- newIdent
-  setTitle "BitIdx"
+  setTitleI MsgAppName
   $(widgetFile "homepage")
   releaseListW releases
 
@@ -330,7 +372,7 @@ searchW msearchString = $(widgetFile "search")
 
 searchPage :: Maybe T.Text -> [Release] -> Widget
 searchPage msearchString releases = do
-  setTitle "Search — Bitidx"
+  setTitleI MsgSearchPageTitle
   searchW msearchString
   when (isJust msearchString) $ do
     releaseListW releases
@@ -351,7 +393,7 @@ discussionW (formWidget, formEnctype) Release {..} comments Permissions {..} = d
 
 discussionPage :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
 discussionPage form release @ Release {..} comments permissions = do
-  setTitle (toHtml releaseName)
+  setTitleI (MsgDiscussionPageTitle releaseName)
   discussionW form release comments permissions
 
 releaseListW :: [Release] -> Widget
@@ -366,11 +408,10 @@ recentlyViewedW infohashes = $(widgetFile "recently-viewed")
 releasePage :: BlankForm -> Release -> [CommentView]
             -> Permissions -> [InfoHash] -> Widget
 releasePage form release @ Release {..} comments permissions recent = do
-  setTitle (toHtml releaseName)
+  setTitleI (MsgReleasePageTitle releaseName)
   releaseW release permissions
   discussionW form release comments permissions
   recentlyViewedW recent
-
 
 {-----------------------------------------------------------------------
 --  User pages
@@ -378,15 +419,24 @@ releasePage form release @ Release {..} comments permissions recent = do
 
 userProfilePage :: User -> Widget
 userProfilePage User {..} = do
-  setTitle (toHtml userScreenName)
+  setTitleI (MsgUserProfilePageTitle userScreenName)
   $(widgetFile "user/profile")
 
 userEditPage :: BlankForm -> User -> Widget
 userEditPage (formWidget, formEnctype) User {..} = do
-  setTitle (toHtml userScreenName)
+  setTitleI (MsgUserEditPageTitle userScreenName)
   $(widgetFile "user/edit")
 
 userMissingPage :: T.Text -> Widget
 userMissingPage userName = do
-  setTitle "Unknown User"
+  setTitleI MsgUserMissingPageTitle
   $(widgetFile "user/missing")
+
+{-----------------------------------------------------------------------
+--  Other pages
+-----------------------------------------------------------------------}
+
+helpW :: Widget
+helpW = do
+  setTitleI MsgHelpPageTitle
+  $(widgetFile "help")

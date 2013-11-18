@@ -1,7 +1,6 @@
 module Import
     ( module Import
     , Json
-    , formFailure
     ) where
 
 import           Prelude              as Import hiding (head, init, last,
@@ -37,15 +36,3 @@ infixr 5 <>
 #endif
 
 type Json = Value
-
-formFailure reasons = do
-  defaultLayout $ do
-    setTitle "Upload failure!"
-    [whamlet|
-     $forall reason <- reasons
-       #{show reason}
-      |]
-
-withFormResult  FormMissing          _      = notFound
-withFormResult (FormFailure reasons) _      = formFailure reasons
-withFormResult (FormSuccess result ) action = action result

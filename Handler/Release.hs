@@ -81,22 +81,13 @@ modifyRelease ih permission action = do
 -----------------------------------------------------------------------}
 
 torrentNotExist :: Handler Html
-torrentNotExist = defaultLayout $ do
-  [whamlet|
-   <p .error> This torrent do not exist or probably has been deleted by the author.
-   |]
+torrentNotExist = defaultLayout torrentNotExistW
 
 getInvalidTorrentFileR :: Handler Html
-getInvalidTorrentFileR = do
-  defaultLayout $ do
-    setTitle "Error: invalid torrent file"
-    $(widgetFile "error/invalid-file")
+getInvalidTorrentFileR = defaultLayout invalidTorrentFileW
 
 getAlreadyExistR :: InfoHash -> Handler Html
-getAlreadyExistR ih = do
-  defaultLayout $ do
-    setTitle "Torrent already exist"
-    $(widgetFile "error/already-exist")
+getAlreadyExistR = defaultLayout . alreadyExistW
 
 {-----------------------------------------------------------------------
 --  Add new release

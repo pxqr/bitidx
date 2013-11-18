@@ -71,7 +71,7 @@ instance Yesod App where
     errorHandler NotFound = do
       fmap toTypedContent $ do
         defaultLayout $ do
-          setTitle "Not found..."
+          setTitleI MsgNotFoundPageTitle
           $(widgetFile "error/not-found")
 
     errorHandler other = defaultErrorHandler other

@@ -4,10 +4,8 @@ module Handler.Help
        ) where
 
 import Import
+import Widget
 
 
 getHelpR :: Handler Html
-getHelpR = do
-  defaultLayout $ do
-    setTitle "Help"
-    $(widgetFile "help")
+getHelpR = defaultLayout helpW

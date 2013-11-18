@@ -19,12 +19,11 @@ import Control.Monad.Logger (runLoggingT)
 import System.IO (stdout)
 import System.Log.FastLogger (mkLogger)
 
-import Handler.Help
-import Handler.Home
 import Handler.Release
-import Handler.User
 import Handler.Search
+import Handler.Static
 import Handler.Tracker
+import Handler.User
 
 
 -- This line actually creates our YesodDispatch instance. It is the second half

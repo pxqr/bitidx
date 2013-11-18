@@ -22,14 +22,13 @@ library
                      Settings
                      Settings.StaticFiles
                      Settings.Development
-                     Handler.Home
-                     Handler.Search
                      Handler.Release
                      Handler.Release.Recent
+                     Handler.Search
+                     Handler.Static
+                     Handler.Tracker
                      Handler.User
                      Handler.User.Permissions
-                     Handler.Help
-                     Handler.Tracker
                      Paths_bitidx
 
     if flag(dev) || flag(library-only)

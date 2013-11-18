@@ -22,20 +22,36 @@ FooterSourceBtn: Исходники
 FooterIssuesBtn: Неполадки
 
 # user
+UserProfilePageTitle userName@Text: #{userName} — Информация о пользователе
+UserEditPageTitle    userName@Text: #{userName} — Изменить ваш профиль
+UserMissingPageTitle:    Пользователь не найден
 ## user profile
-EditProfileBtnCaption: Редактировать профиль
-EditProfileBtnTitle:   TODO
+EditProfileBtnCaption:   Редактировать профиль
+EditProfileBtnTitle:     TODO
 ## user edit profile
 BackToProfileBtnCaption: Вернуться к профилю
-EditUserLegend:  Изменить профиль...
+EditUserLegend:          Изменить профиль...
 
 # search
-NoResults: Нет результатов
+SearchResultsPageTitle query@Text: Результаты поиска для #{query} — Bitidx
+SearchNoQueryPageTitle:            Поиск — Bitidx
+NoResults:       Поиск не дал результатов
+
+# error pages
+InvalidTorrentPageTitle: Торрент файл не корректен
+AlreadyExistPageTitle:   Торрент уже существует
+FormFailurePageTitle:    Вы ввели что-то не то...
+NotFoundPageTitle:       Ничего не найдено...
+
+# the release add page
+AddReleasePageTitle:     Добавить торрент — Bitidx
+AddReleaseSuccess:       Торрент был успешно добавлен...
 
 # the release page
-DescriptionTab: Oписание
-MetadataTab:    Метаданные
-NoDescriptionLbl:  Автор все ещё не добавил описание раздачи...
+ReleasePageTitle name@Text: #{name}
+DescriptionTab:     Oписание
+MetadataTab:        Метаданные
+NoDescriptionLbl:   Автор все ещё не добавил описание раздачи...
 EditDescBtnCaption: Описание
 EditDescBtnTitle:   Изменить имя и описание раздачи
 EditMetaBtnCaption: Метаданные
@@ -72,10 +88,15 @@ ReleaseListTitle:       Перейти к описанию раздачи
 ReleaseListAuthorTitle: Перейти к профилю автора
 
 # the edit description page
+EditDescriptionPageTitle name@Text: #{name} ­ Редактировать описание
 EditDescriptionLegend:    Изменить описание раздачи...
 DescriptionUpdateSuccess: Описание раздачи было успешно обновлено.
 NameLabel:                Имя
 DescriptionLabel:         Описание
 
 # the edit metadata page
-EditMetadataLegend: Изменить метаданные .torrent файла...
+EditMetadataPageTitle:    Редактировать метаданные
+EditMetadataLegend:       Изменить метаданные .torrent файла...
+
+# help page
+HelpPageTitle: Помощь — Bitidx

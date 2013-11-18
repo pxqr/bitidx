@@ -251,7 +251,7 @@ updateDescription Description {..}
 getDescriptionHtml :: Release -> Handler Html
 getDescriptionHtml release @ Release {..} = do
   form <- generateFormPost $ descriptionForm $ releaseDesc release
-  defaultLayout $ descriptionPage form releaseTorrentId
+  defaultLayout $ descriptionPage form releaseTorrentId releaseName
 
 getDescriptionR :: InfoHash -> Handler TypedContent
 getDescriptionR ih = do

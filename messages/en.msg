@@ -22,38 +22,38 @@ FooterSourceBtn: Source
 FooterIssuesBtn: Issues
 
 # user
-UserProfilePageTitle userName@Text: #{userName}
-UserEditPageTitle    userName@Text: #{userName}
-UserMissingPageTitle: Unknown user
-
+UserProfilePageTitle userName@Text: #{userName} — User profile
+UserEditPageTitle    userName@Text: #{userName} — Edit your profile
+UserMissingPageTitle:    Unknown user
 ## permissions
 LoginRequired:           You need to login to perform this action
 PermissionDeniedEdit:    You need editor privileges for this action
 PermissionDeniedComment: You need commenter privileges for this action
 ## user profile
-EditProfileBtnCaption: Edit profile
-EditProfileBtnTitle:   TODO
+EditProfileBtnCaption:   Edit profile
+EditProfileBtnTitle:     Change your profile information
 ## user edit profile
 BackToProfileBtnCaption: Back to profile
-EditUserLegend:  Edit user info...
-EditUserSuccess: Profile has been modified...
+EditUserLegend:          Edit user info...
+EditUserSuccess:         Profile has been modified...
 
 # search
-SearchPageTitle: Search — Bitidx
-NoResults:       No results
+SearchResultsPageTitle query@Text: Search results for #{query} — Bitidx
+SearchNoQueryPageTitle:            Search torrent — Bitidx
+NoResults:               No results
 
 # error pages
-InvalidTorrentPageTitle: Error: invalid torrent file
+InvalidTorrentPageTitle: Invalid torrent file
 AlreadyExistPageTitle:   Torrent already exist
 FormFailurePageTitle:    Form failure!
 NotFoundPageTitle:       Not found...
 
 # the release add page
-AddReleasePageTitle:   Add torrent to database
-AddReleaseSuccess:     Release has been added...
+AddReleasePageTitle:     Add torrent to database — Bitidx
+AddReleaseSuccess:       Torrent has been added...
 
 # the release page
-ReleasePageTitle name@Text: #{name}
+ReleasePageTitle name@Text: #{name} — Release
 DeletedReleaseSuccess: Release has been deleted...
 ReleaseFeedBtnCaption: Feed
 ReleaseFeedBtnTitle:   Copy this URL to RSS/Atom feed and paste in your feed reader
@@ -74,7 +74,7 @@ TorrentBtnTitle:   Get torrent file
 MagnetBtnCaption:  Magnet
 MagnetBtnTitle:    Open magnet link (recommended)
 ## the release discussion widget
-DiscussionPageTitle name@Text: #{name}
+DiscussionPageTitle name@Text: #{name} — Discussion
 HdrComments:    comments
 HdrNoComments:  no comments
 AddCommentBtn:  Add comment
@@ -96,7 +96,7 @@ ReleaseListAuthorTitle: Go to author profile
 ReleaseListMagnetLink:  Download using magnet link
 
 # the edit description page
-EditDescriptionPageTitle: Edit release description
+EditDescriptionPageTitle name@Text: #{name} ­ Edit description
 EditDescriptionLegend:    Edit release description...
 DescriptionUpdateSuccess: Description has been updated...
 NameLabel:                Name
@@ -122,6 +122,5 @@ EncodingTooltip:     TODO tooltip
 PublisherURLLabel:   Publisher URL
 PublisherURLTooltip: TODO tooltip
 
-
 # help page
-HelpPageTitle: Help
+HelpPageTitle: Help — Bitidx

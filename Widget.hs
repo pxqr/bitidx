@@ -208,9 +208,9 @@ descriptionForm Description {..} = renderBootstrap $ do Description
 descriptionW :: BlankForm -> InfoHash -> Widget
 descriptionW (widget, enctype) ih = $(widgetFile "torrent/description")
 
-descriptionPage :: BlankForm -> InfoHash -> Widget
-descriptionPage form ih = do
-  setTitleI MsgEditDescriptionPageTitle
+descriptionPage :: BlankForm -> InfoHash -> T.Text -> Widget
+descriptionPage form ih name = do
+  setTitleI (MsgEditDescriptionPageTitle name)
   descriptionW form ih
 
 {-----------------------------------------------------------------------
@@ -403,9 +403,12 @@ helpW = do
 searchW :: Maybe T.Text -> Widget
 searchW msearchString = $(widgetFile "search")
 
+
+msgSearchPageTitle = maybe MsgSearchNoQueryPageTitle MsgSearchResultsPageTitle
+
 searchPage :: Maybe T.Text -> [Release] -> Widget
 searchPage msearchString releases = do
-  setTitleI MsgSearchPageTitle
+  setTitleI (msgSearchPageTitle msearchString)
   searchW msearchString
   when (isJust msearchString) $ do
     releaseListW releases

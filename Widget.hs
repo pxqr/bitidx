@@ -353,6 +353,34 @@ metadataW :: Torrent -> Widget
 metadataW torrent = $(widgetFile "torrent/metadata")
 
 {-----------------------------------------------------------------------
+--  Discussion page
+-----------------------------------------------------------------------}
+
+userCommentInput :: FieldSettings App
+userCommentInput =  FieldSettings
+  { fsLabel   = ""
+  , fsTooltip = Nothing
+  , fsId      = Just "comment"
+  , fsName    = Just "comment"
+  , fsAttrs   = [("placeholder", "Leave a message...")]
+  }
+
+type CommentView = (Entity Comment, Entity User)
+
+commentForm :: Form Textarea
+commentForm = renderBootstrap $ do
+  areq textareaField userCommentInput Nothing
+
+discussionW :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
+discussionW (formWidget, formEnctype) Release {..} comments Permissions {..} = do
+  $(widgetFile "torrent/discussion")
+
+discussionPage :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
+discussionPage form release @ Release {..} comments permissions = do
+  setTitleI (MsgDiscussionPageTitle releaseName)
+  discussionW form release comments permissions
+
+{-----------------------------------------------------------------------
 --  Main pages
 -----------------------------------------------------------------------}
 
@@ -362,6 +390,11 @@ homePage releases = do
   setTitleI MsgAppName
   $(widgetFile "homepage")
   releaseListW releases
+
+helpW :: Widget
+helpW = do
+  setTitleI MsgHelpPageTitle
+  $(widgetFile "help")
 
 {-----------------------------------------------------------------------
 --  Search page
@@ -380,21 +413,6 @@ searchPage msearchString releases = do
 {-----------------------------------------------------------------------
 --  Release page
 -----------------------------------------------------------------------}
-
-type CommentView = (Entity Comment, Entity User)
-
-commentForm :: Form Textarea
-commentForm = renderBootstrap $ do
-  areq textareaField "" Nothing
-
-discussionW :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
-discussionW (formWidget, formEnctype) Release {..} comments Permissions {..} = do
-  $(widgetFile "torrent/discussion")
-
-discussionPage :: BlankForm -> Release -> [CommentView] -> Permissions -> Widget
-discussionPage form release @ Release {..} comments permissions = do
-  setTitleI (MsgDiscussionPageTitle releaseName)
-  discussionW form release comments permissions
 
 releaseListW :: [Release] -> Widget
 releaseListW releases = $(widgetFile "torrent/list")
@@ -431,12 +449,3 @@ userMissingPage :: T.Text -> Widget
 userMissingPage userName = do
   setTitleI MsgUserMissingPageTitle
   $(widgetFile "user/missing")
-
-{-----------------------------------------------------------------------
---  Other pages
------------------------------------------------------------------------}
-
-helpW :: Widget
-helpW = do
-  setTitleI MsgHelpPageTitle
-  $(widgetFile "help")

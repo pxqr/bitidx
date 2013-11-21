@@ -14,12 +14,12 @@ import Widget
 
 getSearchString :: Handler (Maybe Text)
 getSearchString = do
-  YesodRequest {reqGetParams} <- getRequest
-  case L.lookup searchQueryParamName reqGetParams of
-    Nothing  -> return Nothing
-    Just str
-      | T.null str -> return Nothing
-      |  otherwise -> return (Just str)
+  mq <- lookupGetParam searchQueryParamName
+  case mq of
+    Nothing -> return Nothing
+    Just q
+      | T.null q  -> return Nothing
+      | otherwise -> return (Just q)
 
 searchReleasesT :: Text -> YesodDB App [Entity Release]
 searchReleasesT qstr =

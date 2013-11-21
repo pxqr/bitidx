@@ -11,8 +11,7 @@ $#    <header .header>
                   <form .navbar-search method=get action=@{SearchR} role=search>
                     <input .search-query type=search name=q
                             placeholder=_{MsgNavSearchPlaceholder}>
-$#                <li>
-$#                  <a href=@{SearchR}> _{MsgNavSearchBtn}
+$#                      <input type=submit href=@{SearchR}> _{MsgNavSearchBtn}
                 <li .divider-vertical>
                 <li :checkMaybe mcurrentRoute isAddRoute :.active>
                   <a href=@{AddR}>    _{MsgNavAddBtn}

@@ -8,6 +8,7 @@ import Yesod.Auth.BrowserId
 import Yesod.Auth.GoogleEmail
 import Yesod.Default.Config
 import Yesod.Default.Util (addStaticContentExternal)
+import Yesod.Form.Nic
 import Network.HTTP.Conduit (Manager)
 import qualified Settings
 import Settings.Development (development)
@@ -193,6 +194,7 @@ instance YesodBreadcrumbs App where
   breadcrumb (UserEditR    uid) = return ("Edit"       , Just (UserProfileR uid))
   breadcrumb _                  = return (""           , Just HomeR)
 
+instance YesodNic App where
 
 instance RenderMessage App FormMessage where
     renderMessage _ _ = defaultFormMessage

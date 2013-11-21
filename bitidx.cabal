@@ -107,6 +107,7 @@ library
                      , fast-logger                   >= 0.3
 
  -- TODO remove network dependency
+                     , wai
                      , yesod-newsfeed
                      , base16-bytestring
                      , blaze-builder

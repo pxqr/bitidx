@@ -46,6 +46,10 @@ NotFoundPageTitle:           Ничего не найдено...
 # the release add page
 AddReleasePageTitle:         Добавить торрент — Bitidx
 AddReleaseSuccess:           Торрент был успешно добавлен...
+AddReleaseLegend:            Новый торрент...
+TorrentFileLabel:            Торрент
+AddReleaseBtnCaption:        Добавить
+AddReleaseBtnTitle:          Добавить
 
 # the release page
 ReleasePageTitle name@Text: #{name}

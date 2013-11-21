@@ -39,6 +39,8 @@ module Widget
        , discussionPage
 
          -- * User
+       , UserEdit (..)
+       , userEditForm
        , userProfilePage
        , userEditPage
 
@@ -66,6 +68,7 @@ import Network.URI
 import Text.Markdown
 import Text.Show
 import Yesod as Y
+import Yesod.Form.Nic
 
 import Foundation
 import Model
@@ -446,6 +449,27 @@ releasePage form release @ Release {..} comments permissions recent = do
 {-----------------------------------------------------------------------
 --  User pages
 -----------------------------------------------------------------------}
+
+data UserEdit = UserEdit
+  { editAbout :: Maybe Textarea
+  , nic       :: Html
+  }
+
+aboutInput :: FieldSettings App
+aboutInput =  FieldSettings
+  { fsLabel   = "About"
+  , fsTooltip = Nothing
+  , fsName    = Just "about"
+  , fsId      = Just "about"
+  , fsAttrs   = [ ("placeholder", "Short user description...")
+                , ("accesskey"  , "A")
+                ]
+  }
+
+userEditForm :: User -> Form UserEdit
+userEditForm (User uid about) = renderBootstrap $ do
+  UserEdit <$> aopt textareaField aboutInput (Just (Textarea <$> about))
+           <*> areq nicHtmlField  "nic" ((toHtml . Markdown . TL.fromChunks . return) <$>  about)
 
 userProfilePage :: User -> Widget
 userProfilePage User {..} = do

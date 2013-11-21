@@ -25,17 +25,9 @@ getUserProfileR userName = do
 --  Edit user profile
 -----------------------------------------------------------------------}
 
-data UserEdit = UserEdit
-  { editAbout :: Maybe Textarea
-  }
-
 userUpdates :: UserEdit -> [Update User]
 userUpdates UserEdit {..}
   = maybe [] (\ (Textarea a) -> [UserAbout =. Just a]) editAbout
-
-userEditForm :: User -> Form UserEdit
-userEditForm (User uid about) = renderBootstrap $ do
-  UserEdit <$> aopt textareaField "about" (Just (Textarea <$> about))
 
 getUserEditR :: T.Text -> Handler Html
 getUserEditR userName = do

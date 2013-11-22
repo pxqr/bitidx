@@ -7,6 +7,7 @@ import Import
 import Data.BEncode as BE
 import Data.ByteString
 import Data.List as L
+import Data.Text.Read as T
 import Network.Socket
 import Network.Wai
 import Yesod
@@ -70,10 +71,30 @@ instance Default TrackerSettings where
     , completeIncomplete    = False
     }
 
+setCompactFlag :: TrackerSettings -> Bool -> TrackerSettings
+setCompactFlag settings flag = settings { compactPeerList = flag }
+
 class YesodTracker master where
   getSwarm    :: InfoHash -> HandlerT master IO (Maybe Swarm)
   setSwarm    :: InfoHash -> Swarm -> HandlerT master IO (Maybe Swarm)
   getSettings :: HandlerT master IO TrackerSettings
+
+-- | http://www.bittorrent.org/beps/bep_0023.html
+lookupCompactFlag :: HandlerT master IO (Maybe Bool)
+lookupCompactFlag = (parseFlag =<<) <$> lookupGetParam "compact"
+  where
+    parseFlag t = case T.decimal t of
+      Left s -> Nothing
+      Right (i, _)
+        |  i == 0   -> Just False
+        |  i == 1   -> Just True
+        | otherwise -> Nothing
+
+getAdvisedSettings :: YesodTracker master => HandlerT master IO TrackerSettings
+getAdvisedSettings = do
+  mcompact <- lookupCompactFlag
+  settings <- getSettings
+  return $ maybe settings (setCompactFlag settings) mcompact
 
 {-----------------------------------------------------------------------
 --  Yesod announce query
@@ -224,7 +245,7 @@ yesodAnnounceInfo    YesodAnnounceInfo {..} TrackerSettings {..} = AnnounceInfo
 
 getAnnounceInfo :: YesodTracker master
                 => YesodAnnounceInfo -> HandlerT master IO AnnounceInfo
-getAnnounceInfo resp = yesodAnnounceInfo resp <$> getSettings
+getAnnounceInfo resp = yesodAnnounceInfo resp <$> getAdvisedSettings
 
 swarmToResponse :: Swarm -> YesodAnnounceInfo
 swarmToResponse swarm = YesodAnnounceInfo

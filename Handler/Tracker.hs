@@ -6,11 +6,13 @@ module Handler.Tracker
 import Import
 import Data.BEncode as BE
 import Data.ByteString
+import Data.List as L
 import Network.Socket
 import Network.Wai
 import Yesod
 
 import Data.Torrent.Progress
+import Network.BitTorrent.Core.PeerId
 import Network.BitTorrent.Core.PeerAddr
 import Network.BitTorrent.Tracker.Message
 
@@ -50,8 +52,9 @@ swarmBriefScrape :: Swarm -> BriefScrape
 swarmBriefScrape = undefined
 
 data TrackerSettings = TrackerSettings
-  { defNumWant            :: !Int
-  , reannounceInterval    :: !Int
+  { defNumWant            :: {-# UNPACK #-} !Int
+  , maxNumWant            :: {-# UNPACK #-} !Int
+  , reannounceInterval    :: {-# UNPACK #-} !Int
   , reannounceMinInterval :: !(Maybe Int)
   , compactPeerList       :: !Bool
   , completeIncomplete    :: !Bool
@@ -60,6 +63,7 @@ data TrackerSettings = TrackerSettings
 instance Default TrackerSettings where
   def = TrackerSettings
     { defNumWant            = defaultNumWant
+    , maxNumWant            = 200
     , reannounceInterval    = 30 * 60
     , reannounceMinInterval = Nothing
     , compactPeerList       = False
@@ -114,14 +118,87 @@ yesodAnnounceQuery q @ AnnounceQuery {..} addr        TrackerSettings {..} = Yes
   , qAction = action (fromMaybe defNumWant reqNumWant) reqEvent
   }
 
-parseAnnounceQuery :: [(Text, Text)] -> AnnounceQuery
-parseAnnounceQuery = undefined
+data QueryParam
+  = ParamInfoHash
+  | ParamPeerId
+  | ParamPort
+  | ParamProgress
+  | ParamIP
+  | ParamNumWant
+  | ParamEvent
+    deriving (Show, Eq, Ord, Enum)
+
+-- https://wiki.theory.org/BitTorrent_Tracker_Protocol#Response_Codes
+data ParamParseFailure
+  = Missing QueryParam -- ^ param not found in query string
+  | Invalid QueryParam -- ^ param present but not valid.
+
+missingOffset :: Int
+missingOffset = 101
+
+invalidOffset :: Int
+invalidOffset = 150
+
+paramFailureCode :: ParamParseFailure -> Int
+paramFailureCode (Missing param) = missingOffset + fromEnum param
+paramFailureCode (Invalid param) = invalidOffset + fromEnum param
+
+textToPeerId :: Text -> Maybe PeerId
+textToPeerId = undefined
+
+textToPortNumber :: Text -> Maybe PortNumber
+textToPortNumber = undefined
+
+textToHostAddress :: Text -> Maybe HostAddress
+textToHostAddress = undefined
+
+textToNumWant :: Text -> Maybe Int
+textToNumWant = undefined
+
+textToEvent :: Text -> Maybe Event
+textToEvent = undefined
+
+paramName :: QueryParam -> Text
+paramName ParamInfoHash = "info_hash"
+paramName ParamPeerId   = "peer_id"
+paramName ParamPort     = "port"
+
+parseAnnounceQuery :: [(Text, Text)] -> Either ParamParseFailure AnnounceQuery
+parseAnnounceQuery params = AnnounceQuery
+    <$> reqParam ParamInfoHash textToInfoHash    params
+    <*> reqParam ParamPeerId   textToPeerId      params
+    <*> reqParam ParamPort     textToPortNumber  params
+    <*> progress params
+    <*> optParam ParamIP       textToHostAddress params
+    <*> optParam ParamNumWant  textToNumWant     params
+    <*> optParam ParamEvent    textToEvent       params
+  where
+    withError e = maybe (Left e) Right
+    reqParam param p = withError (Missing param) . L.lookup (paramName param)
+                   >=> withError (Invalid param) . p
+
+    optParam param p ps
+      | Just x <- L.lookup (paramName param) ps
+      = pure <$> withError (Invalid param) (p x)
+      | otherwise = pure Nothing
+
+    progress = undefined
+    ip       = undefined
+    numwant  = undefined
+    event    = undefined
+
+
+data AnnounceFailure
+  = InvalidNumWant   -- client requested more peers than allowed by tracker.
+  | EventlessRequest -- Client sent an eventless request before the specified time.
 
 getAnnounceQuery :: YesodTracker master => HandlerT master IO YesodAnnounceQuery
 getAnnounceQuery = do
   YesodRequest {reqGetParams, reqWaiRequest} <- getRequest
   settings <- getSettings
-  return $ yesodAnnounceQuery (parseAnnounceQuery reqGetParams) (remoteHost reqWaiRequest) settings
+  case parseAnnounceQuery reqGetParams of
+    Left _ -> undefined -- TODO return error code
+    Right query -> return $ yesodAnnounceQuery query (remoteHost reqWaiRequest) settings
 
 {-----------------------------------------------------------------------
 --  Yesod announce response

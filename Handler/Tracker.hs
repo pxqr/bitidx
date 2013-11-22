@@ -1,3 +1,12 @@
+-- supported extensions:
+--
+--   no_peer_id - do not send peer id if no_peer_id=1 specified
+--   http://www.bittorrent.org/beps/bep_0023.html
+--
+--   compact - compact=1 or compact=0
+--   http://permalink.gmane.org/gmane.network.bit-torrent.general/4030
+--
+--
 {-# LANGUAGE NamedFieldPuns #-}
 module Handler.Tracker
        ( getTrackerR
@@ -59,42 +68,53 @@ data TrackerSettings = TrackerSettings
   , reannounceMinInterval :: !(Maybe Int)
   , compactPeerList       :: !Bool
   , completeIncomplete    :: !Bool
+  , noPeerId              :: !Bool
   }
 
 instance Default TrackerSettings where
   def = TrackerSettings
     { defNumWant            = defaultNumWant
-    , maxNumWant            = 200
-    , reannounceInterval    = 30 * 60
+    , maxNumWant            = 200 -- move to bittorrent package?
+    , reannounceInterval    = 30 * 60 -- move to bittorrent package?
     , reannounceMinInterval = Nothing
     , compactPeerList       = False
     , completeIncomplete    = False
+    , noPeerId              = False
     }
 
-setCompactFlag :: TrackerSettings -> Bool -> TrackerSettings
-setCompactFlag settings flag = settings { compactPeerList = flag }
+type Setter  a =       a -> TrackerSettings -> TrackerSettings
+type MSetter a = Maybe a -> TrackerSettings ->  TrackerSettings
+
+ifPresent :: Setter a -> MSetter a
+ifPresent f m s = maybe s (`f` s) m
+
+setCompactFlag, setNoPeerIdFlag :: Setter Bool
+setCompactFlag  flag settings = settings { compactPeerList = flag }
+setNoPeerIdFlag flag settings = settings { noPeerId        = flag }
 
 class YesodTracker master where
   getSwarm    :: InfoHash -> HandlerT master IO (Maybe Swarm)
   setSwarm    :: InfoHash -> Swarm -> HandlerT master IO (Maybe Swarm)
   getSettings :: HandlerT master IO TrackerSettings
 
--- | http://www.bittorrent.org/beps/bep_0023.html
-lookupCompactFlag :: HandlerT master IO (Maybe Bool)
-lookupCompactFlag = (parseFlag =<<) <$> lookupGetParam "compact"
-  where
-    parseFlag t = case T.decimal t of
-      Left s -> Nothing
-      Right (i, _)
-        |  i == 0   -> Just False
-        |  i == 1   -> Just True
-        | otherwise -> Nothing
+parseBoolFlag :: Text -> Maybe Bool
+parseBoolFlag t = case T.decimal t of
+  Left s -> Nothing
+  Right (i, _)
+    |  i == 0   -> Just False
+    |  i == 1   -> Just True
+    | otherwise -> Nothing
+
+lookupGetFlag :: Text -> HandlerT master IO (Maybe Bool)
+lookupGetFlag param = (parseBoolFlag =<<) <$> lookupGetParam param
 
 getAdvisedSettings :: YesodTracker master => HandlerT master IO TrackerSettings
 getAdvisedSettings = do
-  mcompact <- lookupCompactFlag
-  settings <- getSettings
-  return $ maybe settings (setCompactFlag settings) mcompact
+  mcompact  <- lookupGetFlag "compact"
+  mnoPeerId <- lookupGetFlag "no_peer_id"
+  settings  <- getSettings
+  return $ ifPresent setCompactFlag  mcompact
+         $ ifPresent setNoPeerIdFlag mnoPeerId settings
 
 {-----------------------------------------------------------------------
 --  Yesod announce query
@@ -236,10 +256,13 @@ yesodAnnounceInfo    YesodAnnounceInfo {..} TrackerSettings {..} = AnnounceInfo
   , respIncomplete  = completeIncomplete `opt` scrapeIncomplete rBriefScrape
   , respInterval    = reannounceInterval
   , respMinInterval = reannounceMinInterval
-  , respPeers       = (if compactPeerList then CompactPeerList else PeerList) rPeers
+  , respPeers       = (if compactPeerList then CompactPeerList else PeerList)
+                      ((if noPeerId then zeroPeerId else id) <$> rPeers)
   , respWarning     = Nothing
   }
   where
+    zeroPeerId peerAddr = peerAddr { peerID = Nothing }
+
     opt True  a = Just a
     opt False _ = Nothing
 

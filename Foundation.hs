@@ -1,6 +1,7 @@
 module Foundation where
 
 import Prelude
+import Control.Applicative
 import Yesod
 import Yesod.Static
 import Yesod.Auth
@@ -68,6 +69,12 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 
 type Form x = Html -> MForm (HandlerT App IO) (FormResult x, Widget)
 
+-- static copy for development and cdn for production
+scripts =
+  [ (js_jquery_min_js, "http://code.jquery.com/jquery-1.10.1.min.js" :: Text)
+  , (js_bootstrap_js , "http://www.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js")
+  ]
+
 instance Yesod App where
     errorHandler NotFound = do
       fmap toTypedContent $ do
@@ -100,8 +107,8 @@ instance Yesod App where
                 , css_bootstrap_responsive_css
                 ])
 
-            addScriptRemote "http://code.jquery.com/jquery-1.10.1.min.js"
-            addScript (StaticR js_bootstrap_js)
+            mapM_ addScriptEither $
+              (if development then Left . StaticR . fst else Right . snd) <$> scripts
 
             $(widgetFile "default-layout")
 
